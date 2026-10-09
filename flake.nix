@@ -14,6 +14,19 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
+        packages.teable-mcp = pkgs.buildNpmPackage {
+          pname = "teable-mcp-server";
+          version = "1.0.0-unstable-2026-06-07";
+          src = pkgs.fetchFromGitHub {
+            owner = "ltphat2204";
+            repo = "teable-mcp-server";
+            rev = "93fc3680611a1ec4435c4afc004a1d4651967701";
+            hash = "sha256-tVI3Q8PaDXCeJVM0/Jss2OAfQeYr7jHurBV3KZbSFHs=";
+          };
+          npmDepsHash = "sha256-huZ8xM43mwjjK682HqHkYg2gVwZk/4dMb60jieF6AAQ=";
+          meta.mainProgram = "teable-mcp-server";
+        };
+
         devShells.default = pkgs.mkShell {
           packages = [ pkgs.wrangler ];
         };
