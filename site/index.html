@@ -1,0 +1,532 @@
+<!doctype html>
+<!--
+  Opsætning: erstat pladsholderne nedenfor.
+    LISTMONK_HOST    værtsnavnet på jeres listmonk, fx lists.natit.dk
+    LIST_UUID        listens UUID fra listmonk (Lists > listen > UUID)
+    TEABLE_FORM_URL  delingslinket til Teable-formularen (se TEABLE.md)
+  sed -i 's/LISTMONK_HOST/lists.natit.dk/; s/LIST_UUID/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/; s#TEABLE_FORM_URL#https://app.teable.ai/share/xxxxxxxx/view#g' site/index.html
+-->
+<html lang="da" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>natit.dk: for os, der læste Naturvidenskab og IT</title>
+<meta name="description" content="For NatIT'ere: skriv dig på listen, arrangér noget, fortæl hvor du endte, og vis hvad du har lavet.">
+<meta name="theme-color" content="#074A9B">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.bunny.net">
+<link rel="stylesheet" href="https://fonts.bunny.net/css?family=stix-two-text:400,400i,500,600|familjen-grotesk:400,500,600,700&display=swap">
+<script>document.documentElement.className = 'js';</script>
+<style>
+:root {
+  --papir: #EEF2F7;
+  --blaek: #0B2350;
+  --blaek2: #43587A;
+  --blyant: #8E9DB4;
+  --rod: #C8121B;
+  --felt: #F8FAFC;
+  --blaa: #074A9B;
+  --gul: #F1EC3C;
+  --serif: 'STIX Two Text', 'STIX Two', Cambria, Georgia, serif;
+  --sans: 'Familjen Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --pad: clamp(20px, 5vw, 64px);
+  --max: 1240px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  color: var(--blaek);
+  background-color: var(--papir);
+  background-image:
+    linear-gradient(rgba(11,35,80,.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,35,80,.075) 1px, transparent 1px),
+    linear-gradient(rgba(11,35,80,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,35,80,.035) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: -1px -1px;
+  font: 400 1.125rem/1.6 var(--serif);
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+body::before {
+  --l: 960px; content: ''; position: fixed; z-index: -1; left: 0; bottom: 7vh; width: calc(100% + var(--l)); height: 68px; pointer-events: none; opacity: .06;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 960 68' preserveAspectRatio='none'%3E%3Cpath d='M0 2C86.9 2 161.7 17.6 240 34S393.1 66 480 66S641.7 50.4 720 34S873.1 2 960 2' fill='none' stroke='%230B2350' stroke-width='1.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") 0 0 / var(--l) 100% repeat-x;
+  animation: hum 60s linear infinite;
+}
+@keyframes hum { to { transform: translateX(calc(-1 * var(--l))); } }
+@media (max-width: 600px) { body::before { --l: 420px; height: 52px; animation-duration: 30s; } }
+::selection { background: var(--blaek); color: var(--papir); }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .18em; }
+a:hover { text-decoration-color: var(--rod); }
+:focus-visible { outline: 3px solid var(--rod); outline-offset: 3px; border-radius: 2px; }
+.sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 10; background: var(--blaek); color: var(--papir); padding: 10px 14px; font: 500 1rem var(--sans); }
+.skip:focus { top: 12px; }
+
+.wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--pad); }
+h1, h2, h3 { font-weight: 500; line-height: 1.1; margin: 0; }
+h1, h2 { font-family: var(--sans); font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
+h2 { font-size: clamp(2rem, 3.6vw, 2.625rem); line-height: 1.08; max-width: 22ch; }
+h3 { font-size: 1.3125rem; line-height: 1.25; }
+p { margin: 0 0 1em; max-width: 62ch; }
+.lead { font-size: 1.3125rem; line-height: 1.5; }
+.ui, figcaption, label, button, .btn { font-family: var(--sans); }
+figure { margin: 0; }
+figcaption { font-size: .875rem; line-height: 1.5; color: var(--blaek2); max-width: 60ch; }
+.fn { font-family: var(--serif); font-style: italic; color: var(--blaek); margin-right: .35em; }
+section { padding-block: clamp(48px, 5vw, 72px); }
+section > .wrap > h2 + * { margin-top: 28px; }
+
+.top, .hero { background: var(--blaa); color: #fff; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; position: relative; z-index: 2; box-shadow: 0 0 0 100vmax var(--blaa); clip-path: inset(0 -100vmax); }
+.mark { font: 700 1.25rem/1 var(--sans); letter-spacing: -.01em; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+.mark img { width: 44px; height: auto; flex: none; display: block; }
+.top p { margin: 0; font: 400 .875rem/1.4 var(--sans); color: rgba(255,255,255,.82); text-align: right; }
+.top :focus-visible, .hero :focus-visible { outline-color: var(--gul); }
+.hero a:hover { text-decoration-color: var(--gul); }
+
+.hero { position: relative; padding-block: 0 56px; display: flex; flex-direction: column; overflow: hidden; }
+.hero-fig { position: relative; height: 214px; --cx: .5; --cy: .5; --ph: 214px; --u: 38px; }
+.hero-fig svg { position: absolute; left: 0; top: 0; width: 100%; height: var(--ph); display: block; overflow: visible; }
+.hero-fig figcaption { display: none; color: rgba(255,255,255,.86); }
+.hero-fig figcaption { background: var(--blaa); box-shadow: 0 0 0 10px var(--blaa); }
+.hero-fig .fn { color: #fff; }
+.hero-logo { position: absolute; z-index: 1; left: calc(var(--cx) * 100%); top: calc(var(--cy) * var(--ph)); width: calc(2.8 * var(--u)); height: auto; transform: translate(-50%, -50%); filter: drop-shadow(0 0 8px rgba(241,236,60,.3)); animation: shield-in .9s cubic-bezier(.2,.7,.2,1) both, shield-glow 2.2s .55s ease-out both; }
+@keyframes shield-in { from { opacity: 0; transform: translate(-50%, -44%) scale(.84); } }
+@keyframes shield-glow { 0% { filter: drop-shadow(0 0 0 rgba(241,236,60,0)); } 45% { filter: drop-shadow(0 0 26px rgba(241,236,60,.9)); } }
+#phase .cycle { stroke-dasharray: 1; animation: trace 1.8s .5s cubic-bezier(.45,0,.2,1) both; }
+@keyframes trace { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .hero-logo, #phase .cycle, body::before { animation: none; } }
+@media (max-width: 959px) { .hero .lead { font-size: 1.125rem; } }
+@media (max-width: 560px) { .top p { display: none; } }
+.hero-text { width: 100%; position: relative; z-index: 1; }
+.js .hero { cursor: crosshair; }
+.js .hero form { cursor: auto; }
+h1 { font-size: clamp(2.75rem, 7.4vw, 6rem); line-height: .98; letter-spacing: -.035em; max-width: 9ch; }
+.hero .lead { margin-top: 22px; max-width: 34ch; }
+
+.legend { margin-top: 32px; max-width: 30rem; background: var(--felt); color: var(--blaek); border-radius: 6px; padding: 20px; box-shadow: 0 2px 0 rgba(4,30,70,.35); }
+.legend :focus-visible { outline-color: var(--rod); }
+.legend button:focus-visible { outline-color: var(--blaek); }
+.field + .field { margin-top: 14px; }
+.field label { display: block; font-size: .9375rem; font-weight: 500; margin-bottom: 6px; }
+.field label span { font-weight: 400; color: var(--blaek2); }
+input[type=email], input[type=text] {
+  width: 100%; height: 48px; padding: 0 14px;
+  font: 400 1.0625rem var(--sans); color: var(--blaek);
+  background: #fff; border: 1.5px solid var(--blaek2); border-radius: 4px;
+}
+input:focus-visible { outline: 3px solid var(--rod); outline-offset: 1px; border-color: var(--blaek); }
+input[aria-invalid=true] { border-color: var(--rod); }
+.err { margin: 6px 0 0; font: 500 .9375rem/1.4 var(--sans); color: var(--rod); }
+.err:empty { display: none; }
+.row { display: grid; gap: 14px; }
+@media (min-width: 520px) { .row { grid-template-columns: 1.3fr 1fr; } .row .field + .field { margin-top: 0; } }
+.btn, button[type=submit] {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 50px;
+  margin-top: 16px; padding: 0 24px; border: 0; border-radius: 4px; cursor: pointer;
+  font: 600 1.0625rem/1 var(--sans); color: #fff; background: var(--rod); text-decoration: none;
+}
+.btn:hover, button[type=submit]:hover { background: #A00E16; }
+.btn:focus-visible, button[type=submit]:focus-visible { outline: 3px solid var(--blaek); outline-offset: 3px; }
+.next { margin: 14px 0 0; font: 400 .9375rem/1.5 var(--sans); color: var(--blaek2); }
+
+@media (min-width: 600px) {
+  .hero-fig { height: 330px; --ph: 290px; --u: 39px; }
+  .hero-fig figcaption { display: block; position: absolute; left: var(--pad); right: var(--pad); bottom: 0; }
+}
+.no-js #phase, .no-js .hero-fig figcaption { display: none; }
+@media (min-width: 960px) {
+  .hero { min-height: min(820px, 100svh); padding-bottom: 0; }
+  .hero-fig { position: absolute; inset: 0; height: auto; margin: 0; --cx: .71; --cy: .5; --ph: 100%; --u: 104px; }
+  .hero-fig figcaption { left: auto; right: var(--pad); bottom: 28px; max-width: 34ch; text-align: right; }
+  .hero-text { padding-top: clamp(24px, 7vh, 80px); padding-bottom: 64px; }
+}
+
+.where .lead { max-width: 40ch; }
+.strip { --in: max(var(--pad), calc((100% - var(--max)) / 2 + var(--pad))); margin-block: 40px 36px; padding: 32px var(--in) 34px; border-block: 1px solid rgba(11,35,80,.22); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--in); }
+.strip-track { display: flex; width: max-content; }
+.strip-list { display: flex; gap: 64px; margin: 0; padding: 0 64px 0 0; list-style: none; }
+.strip-list + .strip-list { display: none; }
+.strip li { flex: none; width: min(27rem, 78vw); padding-left: 22px; border-left: 4px solid var(--rod); scroll-snap-align: start; }
+.strip li.open { border-left: 2px dashed var(--blaek2); padding-left: 24px; }
+.strip blockquote { margin: 0; }
+.strip .q { margin: 0; font: 400 clamp(1.5rem, 2.6vw, 2.125rem)/1.2 var(--serif); letter-spacing: -.01em; }
+.strip figcaption, .strip .who { margin: 14px 0 0; font: 400 .9375rem/1.5 var(--sans); color: var(--blaek2); }
+.strip li.open a { display: block; text-decoration: none; }
+.strip li.open .who { text-decoration: underline 1px; text-underline-offset: .18em; }
+.strip li.open a:hover .who { text-decoration-color: var(--rod); }
+@keyframes drift { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: no-preference) {
+  .js .strip { padding-inline: 0; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+  .js .strip:focus-visible, .js .strip:focus-within { mask-image: none; }
+  .js .strip-track { margin-left: var(--in); animation: drift 80s linear infinite; }
+  .js .strip-list { min-width: 100vw; }
+  .js .strip-list + .strip-list { display: flex; }
+  .strip:hover .strip-track, .strip:focus-within .strip-track, .strip.off .strip-track { animation-play-state: paused; }
+}
+
+.tl-wrap { position: relative; margin-top: 56px; }
+.tl { position: relative; margin: 0; padding: 0; list-style: none; }
+.tl li { position: relative; padding: 0 0 32px 28px; border-left: 1.5px solid var(--blaek); }
+.tl li:last-child { padding-bottom: 0; }
+.tl li::before { content: ''; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--papir); border: 1.5px solid var(--blaek); }
+.tl time { display: block; font: 600 1rem/1.4 var(--sans); }
+.tl p { margin: 4px 0 0; max-width: 34ch; font-size: 1.0625rem; line-height: 1.45; }
+.tl-axis { display: none; }
+@media (min-width: 860px) {
+  .tl { height: 300px; }
+  .tl li { position: absolute; left: calc(var(--x) * 100%); width: 14.5rem; padding: 0 0 0 16px; border: 0; }
+  .tl li::before { left: -6px; }
+  .tl li::after { content: ''; position: absolute; left: 0; width: 1.5px; background: var(--blaek); }
+  .tl li.up { bottom: 150px; padding-bottom: 46px; }
+  .tl li.up::before { top: auto; bottom: -6px; }
+  .tl li.up::after { bottom: 0; top: 10px; }
+  .tl li.dn { top: 150px; padding-top: 40px; }
+  .tl li.dn::before { top: -6px; }
+  .tl li.dn::after { top: 0; bottom: auto; height: 32px; }
+  .tl li.rt { padding: 0 16px 0 0; transform: translateX(-100%); text-align: right; }
+  .tl li.rt p { margin-left: auto; }
+  .tl li.rt::before { left: auto; right: -6px; }
+  .tl li.rt::after { left: auto; right: 0; }
+  .tl li.up.rt { padding-bottom: 46px; }
+  .tl li.dn.rt { padding-top: 40px; }
+  .tl-axis { display: block; position: absolute; left: 0; right: 0; top: 150px; height: 0; border-top: 1.5px solid var(--blaek); }
+  .tl-axis span { top: auto; }
+  .tl-axis span { position: absolute; bottom: 0; left: calc(var(--x) * 100%); font: 400 .875rem var(--sans); color: var(--blaek2); padding-bottom: 12px; transform: translateX(-50%); }
+  .tl-axis span::before { content: ''; position: absolute; left: 50%; bottom: -5px; height: 10px; width: 1.5px; background: var(--blaek); }
+}
+
+.split { display: grid; gap: 40px; margin-top: 32px; align-items: start; }
+@media (min-width: 900px) { .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; } }
+.empty { position: relative; border-left: 1.5px solid var(--blaek); border-bottom: 1.5px solid var(--blaek); padding: 32px 24px 36px 28px; min-height: 260px; display: flex; flex-direction: column; justify-content: center; }
+.empty .ax { position: absolute; font: italic 400 1rem var(--serif); color: var(--blaek2); }
+.empty .ax.y { left: -4px; top: -26px; }
+.empty .ax.x { right: 0; bottom: -30px; }
+.empty h3 { font-size: 1.5rem; }
+.empty p { margin-top: 10px; font-size: 1.0625rem; }
+.empty .btn { align-self: flex-start; }
+.empty small { display: block; margin-top: 12px; font: 400 .9375rem var(--sans); color: var(--blaek2); }
+
+footer { padding-block: 56px 64px; background: var(--blaa); color: #fff; }
+footer :focus-visible, footer .btn:focus-visible { outline-color: var(--gul); }
+footer img { width: 64px; height: auto; display: block; }
+footer .wrap { display: grid; gap: 24px; }
+@media (min-width: 820px) { footer .wrap { grid-template-columns: auto 1fr auto; align-items: center; gap: 32px; } }
+footer p { font: 400 .9375rem/1.55 var(--sans); color: rgba(255,255,255,.86); margin: 0; max-width: 64ch; }
+footer .btn { margin-top: 0; justify-self: start; background: var(--gul); color: var(--blaek); }
+footer .btn:hover { background: #fff; }
+</style>
+</head>
+<body>
+<a class="skip" href="#indhold">Spring til indhold</a>
+
+<header class="wrap top">
+  <a class="mark" href="#">
+    <img src="natit-logo.svg" alt="" width="44" height="30">
+    natit.dk
+  </a>
+  <p>Alumner fra Naturvidenskab og IT, Københavns Universitet</p>
+</header>
+
+<main id="indhold">
+<section class="hero" aria-labelledby="h1">
+  <figure class="hero-fig">
+    <svg id="phase" aria-hidden="true"></svg>
+    <img class="hero-logo" src="natit-logo.svg" alt="NatIT">
+    <figcaption aria-hidden="true"><span class="fn">Fig. 1.</span>Van der Pol-oscillatoren, løst med Runge–Kutta i din browser. Alle baner finder ind i det samme kredsløb, uanset hvor de starter.</figcaption>
+  </figure>
+  <div class="wrap hero-text">
+    <h1 id="h1">Vi kan begge dele.</h1>
+    <p class="lead">Skriv dig på listen, så hører du det, når nogen fra holdet finder på noget.</p>
+
+    <form id="tilmeld" class="legend" method="post" action="https://LISTMONK_HOST/subscription/form">
+      <input type="hidden" name="nonce" value="">
+      <input type="hidden" name="l" value="LIST_UUID">
+      <div class="row">
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="email-err">
+          <p class="err" id="email-err" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="name">Navn <span>(valgfrit)</span></label>
+          <input id="name" name="name" type="text" autocomplete="name" maxlength="200">
+        </div>
+      </div>
+      <button type="submit">Skriv mig på listen</button>
+      <p class="next">Du får en mail med et link, som bekræfter tilmeldingen. Vi skriver kun, når der er nyt, og du kan afmelde dig i hver mail.</p>
+    </form>
+  </div>
+</section>
+
+<section class="fest" aria-labelledby="h-fest">
+  <div class="wrap">
+    <h2 id="h-fest">Vil du arrangere noget?</h2>
+    <div class="split">
+      <div>
+        <p class="lead">En fest, en bar, et foredrag, en tur. Eller bare øl og vand på streg, som i Lokalet på HCØ.</p>
+        <p>En dato og et sted er nok. Vi sender invitationen ud til alle på listen.</p>
+      </div>
+      <div class="empty">
+        <span class="ax y" aria-hidden="true">arrangementer</span>
+        <span class="ax x" aria-hidden="true">tid</span>
+        <h3>Ingen arrangementer endnu</h3>
+        <p>Det første kræver én, der siger: jeg tager den.</p>
+        <a class="btn" href="mailto:fest@natit.dk?subject=Jeg%20vil%20gerne%20arrangere%20noget%20for%20NatIT%27ere&amp;body=Hej%2C%0A%0AJeg%20vil%20gerne%20arrangere%20noget.%0A%0AHvad%3A%20%0AHvorn%C3%A5r%20og%20hvor%3A%20%0AMin%20%C3%A5rgang%20og%20mit%20spor%3A%20%0A">Jeg vil arrangere noget</a>
+        <small>Åbner en mail til fest@natit.dk</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="where" aria-labelledby="h-where">
+  <div class="wrap">
+    <h2 id="h-where">Hvor endte du?</h2>
+    <p class="lead">Data scientist, GIS-analytiker, forsker eller noget helt tredje? Fortæl hvor du endte, og vis det, du har bygget, forsket i eller lavet.</p>
+  </div>
+  <div class="strip" role="region" aria-label="Citater fra NatIT'ere" tabindex="0">
+    <div class="strip-track">
+      <!-- Citaterne hentes fra Teable via /api/quotes (se TEABLE.md). Listen her vises, hvis det fejler. -->
+      <ul class="strip-list">
+        <li><figure><blockquote><p class="q">”Ingen er udenfor… Vi begyndte som et lille hold.”</p></blockquote><figcaption>Karina Frederiksen, studerende, i et interview på natit.ku.dk</figcaption></figure></li>
+        <li class="open"><a href="TEABLE_FORM_URL"><p class="q">Hvor endte du?</p><p class="who">Skriv dit svar her.</p></a></li>
+        <li class="open"><a href="TEABLE_FORM_URL"><p class="q">Hvad bruger du stadig fra NatIT?</p><p class="who">Skriv dit svar her, med spor og årgang.</p></a></li>
+        <li class="open"><a href="TEABLE_FORM_URL"><p class="q">Har du lavet noget, vi skal se?</p><p class="who">Send et link og to linjer om det.</p></a></li>
+        <li class="open"><a href="TEABLE_FORM_URL"><p class="q">Hvem fra holdet ser du stadig?</p><p class="who">Skriv dit svar her.</p></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="history" aria-labelledby="h-tl">
+  <div class="wrap">
+    <h2 id="h-tl">Fra første hold til sidste dimittend</h2>
+    <div class="tl-wrap">
+    <div class="tl-axis" aria-hidden="true"><span style="--x:0">2010</span><span style="--x:0.1111">2011</span><span style="--x:0.2222">2012</span><span style="--x:0.3333">2013</span><span style="--x:0.4444">2014</span><span style="--x:0.5556">2015</span><span style="--x:0.6667">2016</span><span style="--x:0.7778">2017</span><span style="--x:0.8889">2018</span><span style="--x:1">2019</span></div>
+    <ol class="tl">
+      <li class="up" style="--x:.074"><time datetime="2010-09">September 2010</time><p>Første hold begynder på en helt ny uddannelse.</p></li>
+      <li class="dn" style="--x:.341"><time datetime="2013-01-25">25. januar 2013</time><p>Den første NatIT-bachelor, fra geografisporet. Resten af årgangen fulgte til sommer.</p></li>
+      <li class="up rt" style="--x:.537"><time datetime="2014-10-29">29. oktober 2014</time><p>KU beslutter at lukke uddannelsen.</p></li>
+      <li class="dn" style="--x:.63"><time datetime="2015">Studieåret 2015–16</time><p>Ikke flere nye optag.</p></li>
+      <li class="up rt" style="--x:.944"><time datetime="2018">2018</time><p>De sidste NatIT'ere dimitterer.</p></li>
+    </ol>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="natit-logo.svg" alt="" width="64" height="44">
+    <p>natit.dk er ikke en officiel side fra Københavns Universitet. Fakta om uddannelsen er hentet fra KU's, DIKU's og UG.dk's sider, som de så ud 2010–2015, via Internet Archive.<br>Resten kan løses med den harmoniske oscillator.</p>
+    <a class="btn" href="#tilmeld">Skriv mig på listen</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const RM = matchMedia('(prefers-reduced-motion: reduce)');
+  const { sin, cos, PI, min, max, hypot, random } = Math;
+  const mk = (tag, attrs, parent) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  const f1 = n => Math.round(n * 10) / 10;
+  const poly = pts => pts.map(p => f1(p[0]) + ',' + f1(p[1])).join(' ');
+  const rk4 = (f, s, h) => {
+    const a = f(s), b = f([s[0] + h / 2 * a[0], s[1] + h / 2 * a[1]]);
+    const c = f([s[0] + h / 2 * b[0], s[1] + h / 2 * b[1]]), d = f([s[0] + h * c[0], s[1] + h * c[1]]);
+    return [s[0] + h / 6 * (a[0] + 2 * b[0] + 2 * c[0] + d[0]), s[1] + h / 6 * (a[1] + 2 * b[1] + 2 * c[1] + d[1])];
+  };
+
+  const form = document.getElementById('tilmeld');
+  const email = document.getElementById('email');
+  const err = document.getElementById('email-err');
+  const check = () => {
+    const v = email.value.trim();
+    const msg = !v ? 'Skriv din e-mailadresse.' : email.validity.typeMismatch || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? 'Det ligner ikke en e-mailadresse. Tjek, at der står fx navn@domæne.dk.' : '';
+    err.textContent = msg;
+    email.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    return !msg;
+  };
+  form.addEventListener('submit', e => { if (!check()) { e.preventDefault(); email.focus(); } });
+  email.addEventListener('input', () => { if (email.getAttribute('aria-invalid') === 'true') check(); });
+  form.noValidate = true;
+
+  const vdp = s => [s[1], 1.0 * (1 - s[0] * s[0]) * s[1] - s[0]];
+  const phase = document.getElementById('phase');
+  const heroFig = phase.parentNode;
+  const H = { w: 0, h: 0, s: 1, cx: 0, cy: 0, parts: [], layer: null };
+  const toPx = p => [H.cx + p[0] * H.s, H.cy - p[1] * H.s];
+  const bounds = () => [(-H.cx) / H.s, (H.w - H.cx) / H.s, (H.cy - H.h) / H.s, H.cy / H.s];
+  const spawn = (p, far) => {
+    const b = bounds();
+    let x = b[0] + random() * (b[1] - b[0]), y = b[2] + random() * (b[3] - b[2]);
+    if (far) { const a = random() * 2 * PI; x = 3.4 * cos(a); y = 4.2 * sin(a); }
+    p.s = [x, y]; p.trail = []; p.age = 0; p.life = 9 + random() * 9;
+  };
+  function layoutHero() {
+    const r = phase.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    const cs = getComputedStyle(heroFig);
+    H.w = r.width; H.h = r.height;
+    H.cx = H.w * parseFloat(cs.getPropertyValue('--cx'));
+    H.cy = H.h * parseFloat(cs.getPropertyValue('--cy'));
+    H.s = min(H.h / (H.w >= 900 ? 7.4 : 5.6), H.w / 6.4);
+    heroFig.style.setProperty('--u', f1(H.s) + 'px');
+    phase.setAttribute('viewBox', `0 0 ${H.w} ${H.h}`);
+    phase.textContent = '';
+    const defs = mk('defs', {}, phase);
+    const wide = H.w >= 900;
+    const lg = mk('linearGradient', { id: 'fadeG', x1: 0, x2: 1, y1: 0, y2: 0 }, defs);
+    mk('stop', { offset: wide ? .3 : 0, 'stop-color': '#fff', 'stop-opacity': wide ? 0 : 1 }, lg);
+    mk('stop', { offset: wide ? .52 : 1, 'stop-color': '#fff', 'stop-opacity': 1 }, lg);
+    const m = mk('mask', { id: 'fadeM', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: H.w, height: H.h }, defs);
+    mk('rect', { x: 0, y: 0, width: H.w, height: H.h, fill: 'url(#fadeG)' }, m);
+    const g = mk('g', { mask: 'url(#fadeM)' }, phase);
+    const step = wide ? 34 : 28;
+    let d = '';
+    for (let y = step / 2; y < H.h; y += step) for (let x = step / 2; x < H.w; x += step) {
+      const s = [(x - H.cx) / H.s, (H.cy - y) / H.s], v = vdp(s), n = hypot(v[0], v[1 ]) || 1;
+      const ux = v[0] / n * 5.5, uy = -v[1] / n * 5.5;
+      d += `M${f1(x - ux)} ${f1(y - uy)}L${f1(x + ux)} ${f1(y + uy)}`;
+    }
+    mk('path', { d, stroke: '#9FBCE6', 'stroke-width': 1, 'stroke-linecap': 'round', opacity: .55 }, g);
+    const ax = mk('g', { stroke: '#B9CDEB', 'stroke-width': 1, fill: 'none', opacity: .7 }, g);
+    mk('path', { d: `M${f1(H.cx - 3.2 * H.s)} ${f1(H.cy)}H${f1(H.cx + 3.2 * H.s)}M${f1(H.cx)} ${f1(H.cy + 3.5 * H.s)}V${f1(H.cy - 3.5 * H.s)}` }, ax);
+    let t = '';
+    for (let i = -3; i <= 3; i++) if (i) t += `M${f1(H.cx + i * H.s)} ${f1(H.cy - 4)}v8M${f1(H.cx - 4)} ${f1(H.cy - i * H.s)}h8`;
+    mk('path', { d: t }, ax);
+    const lab = (txt, x, y) => { const e = mk('text', { x: f1(x), y: f1(y), fill: '#D4E1F4', 'font-family': 'STIX Two Text, serif', 'font-style': 'italic', 'font-size': 20 }, g); e.textContent = txt; };
+    lab('x', H.cx + 3.2 * H.s + 8, H.cy + 6);
+    lab('ẋ', H.cx + 8, H.cy - 3.5 * H.s + 4);
+    H.layer = mk('g', { mask: 'url(#fadeM)', fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, phase);
+    const ring = mk('polyline', { class: 'cycle', points: poly(limitCycle()), pathLength: 1, stroke: '#F1EC3C', 'stroke-width': 1.6, 'stroke-opacity': .55 }, H.layer);
+    if (H.traced) ring.style.animation = 'none';
+    H.traced = true;
+    const N = wide ? 30 : 16;
+    H.parts = [];
+    for (let i = 0; i < N; i++) {
+      const hot = i === 0;
+      const p = { hot, path: mk('polyline', { stroke: hot ? '#F1EC3C' : '#fff', 'stroke-width': hot ? 2.2 : 1.2 }, H.layer), head: mk('circle', { r: hot ? 3.5 : 2, fill: hot ? '#F1EC3C' : '#fff' }, H.layer), max: hot ? 220 : 70 };
+      spawn(p, hot);
+      H.parts.push(p);
+    }
+    if (RM.matches) staticHero(); else for (let k = 0; k < 240; k++) heroStep(1 / 60, k < 240 - 70);
+    drawHero();
+  }
+  function limitCycle() {
+    let s = [2, 0]; for (let k = 0; k < 2000; k++) s = rk4(vdp, s, .01);
+    const cyc = []; for (let k = 0; k < 700; k++) { s = rk4(vdp, s, .01); cyc.push(toPx(s)); }
+    return cyc;
+  }
+  function heroStep(dt, skipTrail) {
+    const h = dt * 1.1 / 2;
+    for (const p of H.parts) {
+      p.s = rk4(vdp, rk4(vdp, p.s, h), h);
+      p.age += dt;
+      if (!skipTrail) { p.trail.push(p.s); if (p.trail.length > p.max) p.trail.shift(); }
+      if (p.age > p.life + 1.2 || hypot(p.s[0], p.s[1]) > 40) p.tap ? p.gone = true : spawn(p, p.hot);
+    }
+    if (H.parts.some(p => p.gone)) H.parts = H.parts.filter(p => !p.gone || (p.path.remove(), p.head.remove()));
+  }
+  function drawHero() {
+    for (const p of H.parts) {
+      const a = min(1, p.age / .8) * (p.age > p.life ? max(0, 1 - (p.age - p.life) / 1.2) : 1);
+      p.path.setAttribute('points', poly(p.trail.map(toPx)));
+      p.path.setAttribute('stroke-opacity', f1((p.hot ? .95 : .42) * a * 10) / 10);
+      const q = toPx(p.s);
+      p.head.setAttribute('cx', f1(q[0])); p.head.setAttribute('cy', f1(q[1]));
+      p.head.setAttribute('opacity', f1(a * 10) / 10);
+    }
+  }
+  function staticHero() {
+    H.layer.textContent = '';
+    const b = bounds(), starts = [];
+    for (let i = 0; i < 9; i++) { const u = b[0] + (i + .5) / 9 * (b[1] - b[0]); starts.push([u, b[3] * .95], [u, b[2] * .95]); }
+    starts.push([.05, .05], [-.1, 0], [3, 0], [-3, 0]);
+    for (const s0 of starts) {
+      let s = s0; const pts = [toPx(s)];
+      for (let k = 0; k < 900; k++) { s = rk4(vdp, s, .012); if (k % 3 === 0) pts.push(toPx(s)); }
+      mk('polyline', { points: poly(pts), stroke: '#fff', 'stroke-width': 1, 'stroke-opacity': .34 }, H.layer);
+    }
+    mk('polyline', { points: poly(limitCycle()), stroke: '#F1EC3C', 'stroke-width': 2.2 }, H.layer);
+    H.parts = [];
+  }
+
+  phase.closest('.hero').addEventListener('pointerdown', e => {
+    if (e.button || e.target.closest('form, a') || !H.layer) return;
+    const r = phase.getBoundingClientRect(), s0 = [(e.clientX - r.left - H.cx) / H.s, (H.cy - e.clientY + r.top) / H.s];
+    if (RM.matches) {
+      let s = s0; const pts = [toPx(s)];
+      for (let k = 0; k < 900; k++) { s = rk4(vdp, s, .012); if (k % 3 === 0) pts.push(toPx(s)); }
+      mk('polyline', { points: poly(pts), stroke: '#F1EC3C', 'stroke-width': 1.4, 'stroke-opacity': .8 }, H.layer);
+      return;
+    }
+    const taps = H.parts.filter(p => p.tap);
+    if (taps.length >= 12) taps[0].age = max(taps[0].age, taps[0].life);
+    H.parts.push({ tap: true, hot: true, s: s0, trail: [], age: 0, life: 12, max: 180, path: mk('polyline', { stroke: '#F1EC3C', 'stroke-width': 1.8 }, H.layer), head: mk('circle', { r: 3, fill: '#F1EC3C' }, H.layer) });
+  });
+
+  const strip = document.querySelector('.strip');
+  const list = strip.querySelector('ul');
+  const el = (tag, text, cls) => { const e = document.createElement(tag); if (text) e.textContent = text; if (cls) e.className = cls; return e; };
+  const quoteItem = q => {
+    const cap = el('figcaption', [q.name, [q.track, q.year].filter(Boolean).join(' '), q.now].filter(Boolean).join(', '));
+    if (q.link && /^https?:\/\//i.test(q.link)) { const a = el('a', 'Se det'); a.href = q.link; a.rel = 'noopener'; cap.append(cap.textContent ? ' · ' : '', a); }
+    const bq = el('blockquote'), fig = el('figure'), li = el('li');
+    bq.append(el('p', '”' + q.quote + '”', 'q')); fig.append(bq, cap); li.append(fig);
+    return li;
+  };
+  const fill = quotes => {
+    if (!Array.isArray(quotes) || !quotes.length || strip.getBoundingClientRect().top < innerHeight) return;
+    const asks = [...list.querySelectorAll('.open')], first = list.querySelector('li:not(.open)');
+    const own = quotes.some(q => q.name && first.querySelector('figcaption').textContent.startsWith(q.name));
+    const qs = (own ? [] : [first]).concat(quotes.map(quoteItem));
+    list.replaceChildren(...(qs.length < 3 ? qs.concat(asks) : qs.flatMap((li, i) => i % 3 === 2 || i === qs.length - 1 ? [li, asks[Math.floor(i / 3) % asks.length].cloneNode(true)] : [li])));
+  };
+  const loop = () => {
+    const dup = list.cloneNode(true);
+    dup.setAttribute('aria-hidden', 'true');
+    for (const a of dup.querySelectorAll('a')) a.tabIndex = -1;
+    strip.firstElementChild.append(dup);
+  };
+  Promise.resolve().then(() => fetch('/api/quotes', { signal: AbortSignal.timeout(4000) })).then(r => r.ok ? r.json() : []).then(fill).catch(() => {}).finally(loop);
+
+  let vis = false, raf = 0, last = 0;
+  function frame(now) {
+    raf = 0;
+    const dt = min(.05, (now - (last || now)) / 1000); last = now;
+    if (H.parts.length) { heroStep(dt); drawHero(); }
+    run();
+  }
+  function run() {
+    const go = !RM.matches && !document.hidden && vis;
+    if (go && !raf) raf = requestAnimationFrame(frame);
+    if (!go) { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; }
+  }
+  const io = new IntersectionObserver(es => {
+    for (const e of es) if (e.target === strip) strip.classList.toggle('off', !e.isIntersecting); else vis = e.isIntersecting;
+    run();
+  }, { rootMargin: '80px' });
+  io.observe(heroFig); io.observe(strip);
+  document.addEventListener('visibilitychange', run);
+  RM.addEventListener('change', () => { layoutHero(); run(); });
+  let rz = 0, lastW = 0;
+  new ResizeObserver(() => {
+    const w = heroFig.getBoundingClientRect().width;
+    if (Math.abs(w - lastW) < 2 && H.w) return;
+    lastW = w; clearTimeout(rz); rz = setTimeout(layoutHero, H.w ? 120 : 0);
+  }).observe(heroFig);
+  layoutHero();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+.screenshots/
+.wrangler/
+result
+.backup/
+.dev.vars
