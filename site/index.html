@@ -16,7 +16,14 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.bunny.net">
 <link rel="stylesheet" href="https://fonts.bunny.net/css?family=stix-two-text:400,400i,500,600|familjen-grotesk:400,500,600,700&display=swap">
-<script>document.documentElement.className = 'js';</script>
+<script>
+(() => {
+  const d = new Date(), m = d.getMonth(), t = d.getDate();
+  const theme = new URLSearchParams(location.search).get('theme');
+  const jul = theme ? theme === 'christmas' : (m === 10 && t >= 24) || (m === 11 && t <= 26);
+  document.documentElement.className = jul ? 'js xmas' : 'js';
+})();
+</script>
 <style>
 :root {
   --papir: #EEF2F7;
@@ -218,6 +225,27 @@ footer .wrap { display: grid; gap: 24px; }
 footer p { font: 400 .9375rem/1.55 var(--sans); color: rgba(255,255,255,.86); margin: 0; max-width: 64ch; }
 footer .btn { margin-top: 0; justify-self: start; background: var(--gul); color: var(--blaek); }
 footer .btn:hover { background: #fff; }
+
+.xmas { --blaa: #0B5130; }
+.xmas .hero::before { content: ''; position: absolute; z-index: 2; left: 0; right: 0; top: 0; height: 26px; pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 26'%3E%3Cpath d='M0 2Q24 14 48 2T96 2' fill='none' stroke='%23062a19' stroke-width='1.5'/%3E%3Cg stroke='%23062a19' stroke-width='1'%3E%3Cellipse cx='12' cy='14' rx='4' ry='6' fill='%23FF3B3B'/%3E%3Cellipse cx='36' cy='14' rx='4' ry='6' fill='%23F1EC3C'/%3E%3Cellipse cx='60' cy='14' rx='4' ry='6' fill='%236EC6FF'/%3E%3Cellipse cx='84' cy='14' rx='4' ry='6' fill='%23fff'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 96px 26px repeat-x; filter: drop-shadow(0 0 6px rgba(255,236,120,.8)); }
+.xmas .hero-fig::after { content: ''; position: absolute; z-index: 2; pointer-events: none; width: calc(1.75 * var(--u)); aspect-ratio: 29 / 28; left: calc(var(--cx) * 100% - .15 * var(--u)); top: calc(var(--cy) * var(--ph) - 1.3 * var(--u)); transform: rotate(10deg); background: url(jul/hat.svg) center / contain no-repeat; filter: drop-shadow(0 3px 4px rgba(0,0,0,.3)); animation: hat-in .9s .5s cubic-bezier(.2,.7,.2,1.3) both; }
+@keyframes hat-in { from { opacity: 0; transform: translateY(calc(-1.5 * var(--u))) rotate(-25deg); } }
+.xmas .hero { padding-bottom: 110px; }
+@media (min-width: 960px) { .xmas .hero { padding-bottom: 0; } .xmas .hero-text { padding-bottom: 150px; } }
+.drift { position: absolute; left: 0; bottom: 0; width: 100%; pointer-events: none; overflow: visible; }
+.xmas .empty::after { content: ''; position: absolute; right: 16px; bottom: 0; width: 96px; height: 96px; background: url(jul/snowman.svg) center / contain no-repeat; }
+.xmas main .btn, .xmas button[type=submit] { background: repeating-linear-gradient(-45deg, var(--rod) 0 10px, #9E0D15 10px 20px); }
+.xmas main .btn:hover, .xmas button[type=submit]:hover { filter: brightness(.88); }
+.xmas .tl li::before { background: var(--rod); border-color: var(--rod); box-shadow: inset -3px -3px 0 rgba(0,0,0,.25); }
+.xmas .tl li:nth-child(even)::before { background: var(--gul); border-color: var(--blaek); }
+.xmas .strip li:nth-child(even) { border-left-color: var(--blaa); }
+.snow { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
+@keyframes chase { to { filter: drop-shadow(0 0 6px rgba(255,236,120,.8)) hue-rotate(360deg); } }
+@keyframes twinkle { 50% { opacity: .5; } }
+@media (prefers-reduced-motion: no-preference) {
+  .xmas .hero::before { animation: chase 2.4s steps(4) infinite; }
+  .bulb { animation: twinkle 1.6s ease-in-out infinite; }
+}
 </style>
 </head>
 <body>
@@ -236,11 +264,11 @@ footer .btn:hover { background: #fff; }
   <figure class="hero-fig">
     <svg id="phase" aria-hidden="true"></svg>
     <img class="hero-logo" src="natit-logo.svg" alt="NatIT">
-    <figcaption aria-hidden="true"><span class="fn">Fig. 1.</span>Van der Pol-oscillatoren, løst med Runge–Kutta i din browser. Alle baner finder ind i det samme kredsløb, uanset hvor de starter.</figcaption>
+    <figcaption aria-hidden="true"><span class="fn">Fig. 1.</span><span data-jul="Van der Pol-oscillatoren med julelys på grænsecyklen. Alle baner finder hjem til jul, uanset hvor de starter.">Van der Pol-oscillatoren, løst med Runge–Kutta i din browser. Alle baner finder ind i det samme kredsløb, uanset hvor de starter.</span></figcaption>
   </figure>
   <div class="wrap hero-text">
-    <h1 id="h1">Vi kan begge dele.</h1>
-    <p class="lead">Skriv dig på listen, så hører du det, når nogen fra holdet finder på noget.</p>
+    <h1 id="h1" data-jul="God jul, NatIT.">Vi kan begge dele.</h1>
+    <p class="lead" data-jul="Skriv dig på listen, så hører du det, når nogen fra holdet inviterer til julefrokost.">Skriv dig på listen, så hører du det, når nogen fra holdet finder på noget.</p>
 
     <form id="tilmeld" class="legend" method="post" action="https://LISTMONK_HOST/subscription/form">
       <input type="hidden" name="nonce" value="">
@@ -264,10 +292,10 @@ footer .btn:hover { background: #fff; }
 
 <section class="fest" aria-labelledby="h-fest">
   <div class="wrap">
-    <h2 id="h-fest">Vil du arrangere noget?</h2>
+    <h2 id="h-fest" data-jul="Vil du arrangere julefrokost?">Vil du arrangere noget?</h2>
     <div class="split">
       <div>
-        <p class="lead">En fest, en bar, et foredrag, en tur. Eller bare øl og vand på streg, som i Lokalet på HCØ.</p>
+        <p class="lead" data-jul="Julefrokost, gløgg på en bar, æbleskiver og pakkeleg. Eller bare øl og vand på streg, som i Lokalet på HCØ.">En fest, en bar, et foredrag, en tur. Eller bare øl og vand på streg, som i Lokalet på HCØ.</p>
         <p>En dato og et sted er nok. Vi sender invitationen ud til alle på listen.</p>
       </div>
       <div class="empty">
@@ -322,7 +350,7 @@ footer .btn:hover { background: #fff; }
 <footer>
   <div class="wrap">
     <img src="natit-logo.svg" alt="" width="64" height="44">
-    <p>natit.dk er ikke en officiel side fra Københavns Universitet. Fakta om uddannelsen er hentet fra KU's, DIKU's og UG.dk's sider, som de så ud 2010–2015, via Internet Archive.<br>Resten kan løses med den harmoniske oscillator.</p>
+    <p>natit.dk er ikke en officiel side fra Københavns Universitet. Fakta om uddannelsen er hentet fra KU's, DIKU's og UG.dk's sider, som de så ud 2010–2015, via Internet Archive.<br><span data-jul="Sneen falder med luftmodstand og vind, løst med Euler i din browser.">Resten kan løses med den harmoniske oscillator.</span></p>
     <a class="btn" href="#tilmeld">Skriv mig på listen</a>
   </div>
 </footer>
@@ -338,6 +366,11 @@ footer .btn:hover { background: #fff; }
     if (parent) parent.appendChild(e);
     return e;
   };
+  const XMAS = document.documentElement.classList.contains('xmas');
+  if (XMAS) {
+    for (const e of document.querySelectorAll('[data-jul]')) e.textContent = e.dataset.jul;
+    document.querySelector('meta[name=theme-color]').content = '#0B5130';
+  }
   const f1 = n => Math.round(n * 10) / 10;
   const poly = pts => pts.map(p => f1(p[0]) + ',' + f1(p[1])).join(' ');
   const rk4 = (f, s, h) => {
@@ -398,13 +431,13 @@ footer .btn:hover { background: #fff; }
       const ux = v[0] / n * 5.5, uy = -v[1] / n * 5.5;
       d += `M${f1(x - ux)} ${f1(y - uy)}L${f1(x + ux)} ${f1(y + uy)}`;
     }
-    mk('path', { d, stroke: '#9FBCE6', 'stroke-width': 1, 'stroke-linecap': 'round', opacity: .55 }, g);
-    const ax = mk('g', { stroke: '#B9CDEB', 'stroke-width': 1, fill: 'none', opacity: .7 }, g);
+    mk('path', { d, stroke: XMAS ? '#A8D5B5' : '#9FBCE6', 'stroke-width': 1, 'stroke-linecap': 'round', opacity: .55 }, g);
+    const ax = mk('g', { stroke: XMAS ? '#BFE0C8' : '#B9CDEB', 'stroke-width': 1, fill: 'none', opacity: .7 }, g);
     mk('path', { d: `M${f1(H.cx - 3.2 * H.s)} ${f1(H.cy)}H${f1(H.cx + 3.2 * H.s)}M${f1(H.cx)} ${f1(H.cy + 3.5 * H.s)}V${f1(H.cy - 3.5 * H.s)}` }, ax);
     let t = '';
     for (let i = -3; i <= 3; i++) if (i) t += `M${f1(H.cx + i * H.s)} ${f1(H.cy - 4)}v8M${f1(H.cx - 4)} ${f1(H.cy - i * H.s)}h8`;
     mk('path', { d: t }, ax);
-    const lab = (txt, x, y) => { const e = mk('text', { x: f1(x), y: f1(y), fill: '#D4E1F4', 'font-family': 'STIX Two Text, serif', 'font-style': 'italic', 'font-size': 20 }, g); e.textContent = txt; };
+    const lab = (txt, x, y) => { const e = mk('text', { x: f1(x), y: f1(y), fill: XMAS ? '#DCEFE2' : '#D4E1F4', 'font-family': 'STIX Two Text, serif', 'font-style': 'italic', 'font-size': 20 }, g); e.textContent = txt; };
     lab('x', H.cx + 3.2 * H.s + 8, H.cy + 6);
     lab('ẋ', H.cx + 8, H.cy - 3.5 * H.s + 4);
     H.layer = mk('g', { mask: 'url(#fadeM)', fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, phase);
@@ -421,6 +454,7 @@ footer .btn:hover { background: #fff; }
     }
     if (RM.matches) staticHero(); else for (let k = 0; k < 240; k++) heroStep(1 / 60, k < 240 - 70);
     drawHero();
+    if (XMAS) layoutXmas(wide, defs);
   }
   function limitCycle() {
     let s = [2, 0]; for (let k = 0; k < 2000; k++) s = rk4(vdp, s, .01);
@@ -459,6 +493,110 @@ footer .btn:hover { background: #fff; }
     }
     mk('polyline', { points: poly(limitCycle()), stroke: '#F1EC3C', 'stroke-width': 2.2 }, H.layer);
     H.parts = [];
+  }
+
+  const X = { cyc: [], arc: [], len: 0, t: 0, cars: [], puffs: [], emit: 0, ta: 2, elves: [] };
+  const drift = XMAS && heroFig.parentNode.insertBefore(mk('svg', { class: 'drift', 'aria-hidden': 'true' }), heroFig.nextSibling);
+  function layoutXmas(wide, defs) {
+    let cyc = limitCycle(), n = 500;
+    const d0 = i => hypot(cyc[i][0] - cyc[0][0], cyc[i][1] - cyc[0][1]);
+    for (let i = 500; i < cyc.length; i++) if (d0(i) < d0(n)) n = i;
+    X.cyc = cyc = cyc.slice(0, n);
+    X.arc = [0];
+    for (let i = 1; i < n; i++) X.arc.push(X.arc[i - 1] + hypot(cyc[i][0] - cyc[i - 1][0], cyc[i][1] - cyc[i - 1][1]));
+    X.len = X.arc[n - 1] + d0(n - 1);
+
+    const c9 = mk('g', { id: 'c9' }, defs);
+    mk('circle', { cy: 11, r: 10, fill: 'currentColor', opacity: .14 }, c9);
+    mk('circle', { cy: 11, r: 6.5, fill: 'currentColor', opacity: .22 }, c9);
+    mk('path', { d: 'M-3.6 4.2C-5.8 8-4.8 13 0 17.6C4.8 13 5.8 8 3.6 4.2Z', fill: 'currentColor' }, c9);
+    mk('path', { d: 'M.6 4.2H3.6C5.8 8 4.8 13 0 17.6C2.4 13 2.6 8 .6 4.2Z', fill: '#000', opacity: .2 }, c9);
+    mk('ellipse', { cx: -1.7, cy: 8.6, rx: .9, ry: 2.6, fill: '#fff', opacity: .75 }, c9);
+    mk('rect', { x: -2.4, y: 0, width: 4.8, height: 4.8, rx: .8, fill: '#174D2C' }, c9);
+    mk('path', { d: 'M-2.4 1.6h4.8M-2.4 3.2h4.8', stroke: '#0A2615', 'stroke-width': .6 }, c9);
+    const lights = mk('g', { mask: 'url(#fadeM)' }, phase), bs = wide ? 1.15 : .8;
+    for (let i = 0, k = 0; i < n; i += 18, k++) {
+      const b = mk('use', { href: '#c9', class: 'bulb', color: ['#FF3B3B', '#F1EC3C', '#4FC3FF', '#7CFF8A', '#FF8AD8'][k % 5], transform: `translate(${f1(cyc[i][0])} ${f1(cyc[i][1])}) rotate(${k % 2 ? 8 : -8}) scale(${bs})` }, lights);
+      b.style.animationDelay = (k % 7) * -.23 + 's';
+    }
+
+    const tr = mk('g', {}, phase), w = X.w = H.s * .7;
+    const pg = mk('g', { fill: '#fff' }, tr);
+    X.puffs = Array.from({ length: 14 }, () => ({ e: mk('circle', { r: 0, opacity: 0 }, pg), age: 9 }));
+    X.toot = mk('text', { 'font-family': 'Familjen Grotesk, sans-serif', 'font-weight': 700, 'font-size': f1(w * .3), fill: '#fff', opacity: 0, 'text-anchor': 'middle' }, tr);
+    X.toot.textContent = 'tøf tøf!';
+    const car = cargo => {
+      const g = mk('g', {}, tr);
+      mk('rect', { x: f1(-w * .42), y: f1(-w * .3), width: f1(w * .84), height: f1(w * .16), rx: f1(w * .04), fill: '#C8121B' }, g);
+      for (const sx of [-.26, .26]) mk('circle', { cx: f1(w * sx), cy: f1(-w * .1), r: f1(w * .1), fill: '#3A3A3A', stroke: '#D3D3D3', 'stroke-width': f1(w * .03) }, g);
+      mk('image', { href: `jul/${cargo}.svg`, x: f1(-w * .36), y: f1(-w), width: f1(w * .72), height: f1(w * .72) }, g);
+      return g;
+    };
+    X.cars = [mk('image', { href: 'jul/loco.svg', x: f1(-w / 2), y: f1(-w * .92), width: f1(w), height: f1(w) }, tr), car('gift'), car('tree'), car('snowman')];
+
+    drift.textContent = '';
+    const W = X.W = heroFig.parentNode.getBoundingClientRect().width, Hd = wide ? 130 : 96, S = wide ? 64 : 42;
+    drift.style.height = Hd + 'px';
+    drift.setAttribute('viewBox', `0 0 ${f1(W)} ${Hd}`);
+    const Y = X.Y = x => Hd * .45 + 14 * sin(x / 83 + 1) + 7 * sin(x / 31 + 2);
+    X.Yp = x => 14 / 83 * cos(x / 83 + 1) + 7 / 31 * cos(x / 31 + 2);
+    const Yb = x => Hd * .22 + 12 * sin(x / 120 + 3) + 5 * sin(x / 47);
+    const hill = (f, fill) => { let d = `M0 ${Hd}`; for (let x = 0; x <= W + 8; x += 8) d += `L${x} ${f1(f(x))}`; mk('path', { d: d + `L${f1(W + 8)} ${Hd}Z`, fill }, drift); };
+    const put = (name, xs, size, f) => xs.filter((_, i) => wide || i % 2 === 0).forEach(fx => mk('image', { href: `jul/${name}.svg`, x: f1(fx * W - size / 2), y: f1(f(fx * W) - size * .9), width: size, height: size }, drift));
+    hill(Yb, '#D7E8F2');
+    put('tree', [.04, .22, .36, .66, .8, .97], S * 1.1, Yb);
+    hill(Y, '#fff');
+    put('snowman', [.13, .5, .91], S * 1.05, Y);
+    put('gift', [.17, .45, .55, .87], S * .45, Y);
+    const eg = mk('g', {}, drift), N = wide ? 4 : 2, es = X.es = S * .95;
+    X.elves = Array.from({ length: N }, (_, i) => ({ x: W * (i + .3) / N, v: 120, push: 280 + 40 * random(), e: mk('image', { href: 'jul/elfski.svg', x: f1(-es / 2), y: f1(-es * .78), width: f1(es), height: f1(es) }, eg) }));
+    xmasStep(0);
+  }
+  function at(a) {
+    a = (a % X.len + X.len) % X.len;
+    let lo = 0, hi = X.cyc.length - 1;
+    while (lo < hi) { const m = (lo + hi + 1) >> 1; if (X.arc[m] <= a) lo = m; else hi = m - 1; }
+    const p = X.cyc[lo], q = X.cyc[(lo + 1) % X.cyc.length], f = (a - X.arc[lo]) / (hypot(q[0] - p[0], q[1] - p[1]) || 1);
+    return [p[0] + f * (q[0] - p[0]), p[1] + f * (q[1] - p[1]), q[0] - p[0], q[1] - p[1]];
+  }
+  function xmasStep(dt) {
+    const n = X.cyc.length;
+    X.t = (X.t + dt * 110) % n;
+    const i = Math.floor(X.t), a0 = X.arc[i] + (X.t - i) * ((X.arc[i + 1] ?? X.len) - X.arc[i]);
+    let head;
+    X.cars.forEach((e, k) => {
+      const [x, y, dx, dy] = at(a0 - k * X.w * .95), r = Math.atan2(dy, dx);
+      e.setAttribute('transform', `translate(${f1(x)} ${f1(y)}) rotate(${f1(r * 180 / PI)}) scale(-1 1)`);
+      if (!k) head = [x, y, r];
+    });
+    const [hx, hy, r] = head, lx = .125 * X.w, ly = -.83 * X.w;
+    const cx0 = hx + lx * cos(r) - ly * sin(r), cy0 = hy + lx * sin(r) + ly * cos(r);
+    X.emit -= dt;
+    if (dt && X.emit <= 0) {
+      X.emit = .16;
+      const p = X.puffs.find(p => p.age > 1.6);
+      if (p) Object.assign(p, { x: cx0, y: cy0, vx: (random() - .5) * 20, vy: -40, age: 0 });
+    }
+    for (const p of X.puffs) {
+      if (p.age > 1.6) { p.e.setAttribute('opacity', 0); continue; }
+      p.age += dt; p.vy += dt * (-30 - 1.5 * p.vy); p.vx -= dt * 1.5 * p.vx;
+      p.x += dt * p.vx; p.y += dt * p.vy;
+      const k = min(1, p.age / 1.6);
+      p.e.setAttribute('cx', f1(p.x)); p.e.setAttribute('cy', f1(p.y));
+      p.e.setAttribute('r', f1(X.w * (.08 + .22 * k))); p.e.setAttribute('opacity', f1(.85 * (1 - k) * 10) / 10);
+    }
+    X.ta += dt;
+    if (X.ta > 4.5) { X.ta = 0; X.tp = [cx0, cy0 - X.w * .35]; }
+    const kt = X.ta / 1.4;
+    X.toot.setAttribute('opacity', kt < 1 ? f1((1 - kt) * 10) / 10 : 0);
+    if (kt < 1) { X.toot.setAttribute('x', f1(X.tp[0])); X.toot.setAttribute('y', f1(X.tp[1] - kt * X.w * .6)); }
+    for (const f of X.elves) {
+      const s = X.Yp(f.x), q = Math.sqrt(1 + s * s);
+      f.v += dt * (600 * s / q - 2 * f.v + f.push);
+      f.x += dt * f.v / q;
+      if (f.x > X.W + X.es) { f.x = -X.es; f.v = 120; }
+      f.e.setAttribute('transform', `translate(${f1(f.x)} ${f1(X.Y(f.x))}) rotate(${f1(Math.atan(X.Yp(f.x)) * 180 / PI - 19)}) scale(-1 1)`);
+    }
   }
 
   phase.closest('.hero').addEventListener('pointerdown', e => {
@@ -505,6 +643,7 @@ footer .btn:hover { background: #fff; }
     raf = 0;
     const dt = min(.05, (now - (last || now)) / 1000); last = now;
     if (H.parts.length) { heroStep(dt); drawHero(); }
+    if (X.cyc.length) xmasStep(dt);
     run();
   }
   function run() {
@@ -516,7 +655,7 @@ footer .btn:hover { background: #fff; }
     for (const e of es) if (e.target === strip) strip.classList.toggle('off', !e.isIntersecting); else vis = e.isIntersecting;
     run();
   }, { rootMargin: '80px' });
-  io.observe(heroFig); io.observe(strip);
+  io.observe(heroFig.parentNode); io.observe(strip);
   document.addEventListener('visibilitychange', run);
   RM.addEventListener('change', () => { layoutHero(); run(); });
   let rz = 0, lastW = 0;
@@ -526,6 +665,43 @@ footer .btn:hover { background: #fff; }
     lastW = w; clearTimeout(rz); rz = setTimeout(layoutHero, H.w ? 120 : 0);
   }).observe(heroFig);
   layoutHero();
+
+  if (XMAS) {
+    const cv = document.body.appendChild(document.createElement('canvas'));
+    cv.className = 'snow'; cv.setAttribute('aria-hidden', 'true');
+    const cx = cv.getContext('2d');
+    let W = 0, Hh = 0, flakes = [], tt = 0, lastS = 0;
+    const flake = top => ({ x: random() * W, y: top ? -10 : random() * Hh, vx: 0, vy: 0, r: 1.2 + random() * 2.6, ph: random() * 2 * PI });
+    const size = () => {
+      const dpr = min(2, devicePixelRatio || 1);
+      const regen = W !== innerWidth;
+      W = innerWidth; Hh = innerHeight; cv.width = W * dpr; cv.height = Hh * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (regen) flakes = Array.from({ length: min(160, Math.round(W / 9)) }, () => flake(false));
+    };
+    const draw = () => {
+      cx.clearRect(0, 0, W, Hh);
+      cx.fillStyle = '#fff'; cx.strokeStyle = 'rgba(11,35,80,.28)'; cx.lineWidth = 1;
+      cx.beginPath();
+      for (const f of flakes) { cx.moveTo(f.x + f.r, f.y); cx.arc(f.x, f.y, f.r, 0, 2 * PI); }
+      cx.fill(); cx.stroke();
+    };
+    const snow = now => {
+      const dt = min(.05, (now - (lastS || now)) / 1000); lastS = now; tt += dt;
+      for (const f of flakes) {
+        const k = 4 / f.r, wind = 40 * sin(f.y / 140 + tt * .5 + f.ph);
+        f.vx += dt * k * (wind - f.vx);
+        f.vy += dt * (60 - k * f.vy);
+        f.x += dt * f.vx; f.y += dt * f.vy;
+        if (f.y > Hh + 10) Object.assign(f, flake(true));
+        f.x = (f.x + W) % W;
+      }
+      draw();
+      if (!RM.matches) requestAnimationFrame(snow);
+    };
+    size(); addEventListener('resize', size);
+    RM.matches ? draw() : requestAnimationFrame(snow);
+    RM.addEventListener('change', () => { lastS = 0; RM.matches ? draw() : requestAnimationFrame(snow); });
+  }
 })();
 </script>
 </body>
