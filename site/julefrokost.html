@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NatIT Julefrokost · natit.dk</title>
+<meta name="theme-color" content="#074A9B">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.bunny.net/css?family=stix-two-text:400,600|familjen-grotesk:400,500,600&display=swap">
+<link rel="stylesheet" href="/side.css">
+<link rel="stylesheet" href="/form.css">
+<meta name="description" content="NatIT Julefrokost lørdag 5. december 2026 kl. 13. Tilmeld dig her.">
+</head>
+<body>
+<main>
+  <a class="home" href="/"><img src="/natit-logo-blue.svg" alt="" width="40" height="28">natit.dk</a>
+  <h1>NatIT Julefrokost</h1>
+  <p><time datetime="2026-12-05T13:00">Lørdag 5. december kl. 13</time>. Sted kommer senere.</p>
+  <p class="ok" id="tak">Tak! Du er tilmeldt. Vi skriver, når planen er klar.</p>
+  <form class="legend stack" method="post" action="/api/signup">
+    <input type="hidden" name="event" value="recMnXWr0zAMUocMaW2">
+    <div class="field">
+      <label for="j-navn">Navn</label>
+      <input id="j-navn" name="navn" type="text" required maxlength="200" autocomplete="name">
+    </div>
+    <fieldset>
+      <legend>Kommer du?</legend>
+      <div class="checks">
+        <label><input type="radio" name="kommer" value="Ja" required> Ja</label>
+        <label><input type="radio" name="kommer" value="Måske"> Måske</label>
+        <label><input type="radio" name="kommer" value="Nej"> Nej</label>
+      </div>
+    </fieldset>
+    <div class="field">
+      <label for="j-email">E-mail <span>(valgfrit)</span></label>
+      <p class="hint" id="j-email-hint">Så vi kan sende detaljer, når planen er klar.</p>
+      <input id="j-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="j-email-hint">
+    </div>
+    <fieldset>
+      <legend>Kost og allergier <span>(valgfrit)</span></legend>
+      <p class="hint">Bruges kun til maden og slettes efter arrangementet.</p>
+      <div class="checks">
+        <label><input type="checkbox" name="kost" value="Vegetar"> Vegetar</label>
+        <label><input type="checkbox" name="kost" value="Vegansk"> Vegansk</label>
+        <label><input type="checkbox" name="kost" value="Glutenfri"> Glutenfri</label>
+        <label><input type="checkbox" name="kost" value="Laktosefri"> Laktosefri</label>
+        <label><input type="checkbox" name="kost" value="Nødder"> Nødder</label>
+        <label><input type="checkbox" name="kost" value="Fisk og skaldyr"> Fisk og skaldyr</label>
+        <label><input type="checkbox" name="kost" value="Intet svinekød"> Intet svinekød</label>
+      </div>
+    </fieldset>
+    <div class="field">
+      <label for="j-bem">Andet, vi skal vide? <span>(valgfrit)</span></label>
+      <textarea id="j-bem" name="bemaerkning" maxlength="1000" rows="3"></textarea>
+    </div>
+    <button type="submit">Tilmeld mig</button>
+    <p class="next">Du kan tilmelde dig igen, hvis dit svar ændrer sig. Vi bruger dit nyeste svar. <a href="/privatliv">Privatliv</a></p>
+  </form>
+</main>
+</body>
+</html>

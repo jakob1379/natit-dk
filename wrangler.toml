@@ -7,8 +7,9 @@ routes = [{ pattern = "natit.dk", custom_domain = true }]
 
 [assets]
 directory = "./site"
+binding = "ASSETS"
 not_found_handling = "404-page"
-run_worker_first = ["/api/*"]
+run_worker_first = ["/", "/api/*"]
 
 [vars]
 TEABLE_TABLE_ID = "tblFW1AiHL2M6sQvuZd"

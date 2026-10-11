@@ -1,6 +1,6 @@
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-export const reply = (status, body) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
+export const go = (request, to) => Response.redirect(new URL(to, request.url), 303);
 export const text = (form, key, max) => String(form.get(key) || '').trim().slice(0, max);
 export const email = v => {
   const e = String(v || '').trim().toLowerCase();
@@ -13,23 +13,23 @@ export const teable = (env, path, init = {}) => fetch(`${(env.TEABLE_BASE || 'ht
   signal: AbortSignal.timeout(5000),
 });
 
-export const handler = (tableId, parse, allow) => async ({ request, env }) => {
-  if (+request.headers.get('content-length') > 8192) return reply(413, { error: 'size' });
+export const handler = (tableId, done, parse, allow) => async ({ request, env }) => {
+  if (+request.headers.get('content-length') > 8192) return go(request, '/fejl');
   let form;
-  try { form = await request.formData(); } catch { return reply(400, { error: 'invalid' }); }
+  try { form = await request.formData(); } catch { return go(request, '/fejl'); }
   const fields = parse(form);
-  if (!fields) return reply(400, { error: 'invalid' });
+  if (!fields) return go(request, '/fejl');
   if (!env.TEABLE_TOKEN) {
     console.error('form: TEABLE_TOKEN missing');
-    return reply(500, { error: 'config' });
+    return go(request, '/fejl');
   }
   try {
-    if (allow && !(await allow(fields, env))) return reply(400, { error: 'invalid' });
+    if (allow && !(await allow(fields, env))) return go(request, '/fejl');
     const res = await teable(env, `/api/table/${tableId}/record`, { method: 'POST', body: JSON.stringify({ fieldKeyType: 'id', records: [{ fields }] }) });
     if (!res.ok && (await res.json().catch(() => ({}))).data?.domainCode !== 'validation.field.unique') throw new Error(`Teable ${res.status}`);
-    return reply(200, { ok: true });
+    return go(request, done);
   } catch (e) {
     console.error('form:', e.message);
-    return reply(502, { error: 'upstream' });
+    return go(request, '/fejl');
   }
 };

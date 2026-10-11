@@ -3,7 +3,7 @@ import { handler, email, text, compact, teable } from './form.js';
 const KOMMER = new Set(['Ja', 'Måske', 'Nej']);
 const KOST = new Set(['Vegetar', 'Vegansk', 'Glutenfri', 'Laktosefri', 'Nødder', 'Fisk og skaldyr', 'Intet svinekød']);
 
-export const onRequestPost = handler('tblDziiPvSXuOwfHtmM', form => {
+export const onRequestPost = handler('tblDziiPvSXuOwfHtmM', '/julefrokost#tak', form => {
   const navn = text(form, 'navn', 200), kommer = text(form, 'kommer', 10), event = text(form, 'event', 40), mail = text(form, 'email', 254);
   const kost = [...new Set(form.getAll('kost').map(String))];
   const e = mail ? email(mail) : '';

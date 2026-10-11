@@ -1,4 +1,4 @@
-:root { --papir: #EEF2F7; --blaek: #0B2350; --blaek2: #43587A; --blaa: #074A9B; --rod: #C8121B; --serif: 'STIX Two Text', 'STIX Two', Cambria, Georgia, serif; --sans: 'Familjen Grotesk', 'Helvetica Neue', Arial, sans-serif; }
+:root { --papir: #EEF2F7; --blaek: #0B2350; --blaek2: #43587A; --blaa: #074A9B; --felt: #F8FAFC; --rod: #C8121B; --serif: 'STIX Two Text', 'STIX Two', Cambria, Georgia, serif; --sans: 'Familjen Grotesk', 'Helvetica Neue', Arial, sans-serif; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--papir); color: var(--blaek); font: 400 1.125rem/1.6 var(--serif); }
 main { max-width: 44rem; margin: 0 auto; padding: 48px clamp(20px, 5vw, 64px) 80px; }
