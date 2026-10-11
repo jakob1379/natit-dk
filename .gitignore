@@ -4,3 +4,4 @@ result
 .backup/
 .dev.vars
 .env
+.teable/

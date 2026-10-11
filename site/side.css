@@ -1,0 +1,14 @@
+:root { --papir: #EEF2F7; --blaek: #0B2350; --blaek2: #43587A; --blaa: #074A9B; --rod: #C8121B; --serif: 'STIX Two Text', 'STIX Two', Cambria, Georgia, serif; --sans: 'Familjen Grotesk', 'Helvetica Neue', Arial, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--papir); color: var(--blaek); font: 400 1.125rem/1.6 var(--serif); }
+main { max-width: 44rem; margin: 0 auto; padding: 48px clamp(20px, 5vw, 64px) 80px; }
+.home { display: inline-flex; align-items: center; gap: 10px; font: 600 1rem var(--sans); color: var(--blaa); text-decoration: none; }
+.home img { width: 40px; height: auto; }
+h1, h2 { font-family: var(--sans); letter-spacing: -.02em; line-height: 1.1; }
+h1 { font-size: clamp(2.25rem, 6vw, 3.5rem); margin: 40px 0 16px; }
+h2 { font-size: 1.5rem; margin: 40px 0 8px; }
+a { color: var(--blaa); }
+a:focus-visible { outline: 3px solid var(--rod); outline-offset: 2px; }
+ul { padding-left: 1.2em; }
+li + li { margin-top: 8px; }
+small { display: block; margin-top: 48px; font: 400 .9375rem var(--sans); color: var(--blaek2); }

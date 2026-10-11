@@ -7,35 +7,49 @@
   };
 
   outputs =
-    { nixpkgs, flake-utils, ... }:
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      ...
+    }:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        packages.teable-mcp = pkgs.buildNpmPackage {
-          pname = "teable-mcp-server";
-          version = "1.0.0-unstable-2026-06-07";
-          src = pkgs.fetchFromGitHub {
-            owner = "ltphat2204";
-            repo = "teable-mcp-server";
-            rev = "93fc3680611a1ec4435c4afc004a1d4651967701";
-            hash = "sha256-tVI3Q8PaDXCeJVM0/Jss2OAfQeYr7jHurBV3KZbSFHs=";
+        packages.teable-cli = pkgs.stdenvNoCC.mkDerivation rec {
+          pname = "teable-cli";
+          version = "0.6.45";
+          src = pkgs.fetchurl {
+            url = "https://registry.npmjs.org/@teable/cli/-/cli-${version}.tgz";
+            hash = "sha512-GrVMTVEH9xpU7mVAVcuBYhZEKWY0MNaMp2DUlqgQeDhOIzK7oqBnRvj8nIT37KVxy5wJ6/v7uzVdtdjz4d0icw==";
           };
-          npmDepsHash = "sha256-huZ8xM43mwjjK682HqHkYg2gVwZk/4dMb60jieF6AAQ=";
-          meta.mainProgram = "teable-mcp-server";
+          nativeBuildInputs = [ pkgs.makeWrapper ];
+          installPhase = ''
+            mkdir -p $out/lib/teable-cli
+            cp -r bin dist package.json $out/lib/teable-cli
+            makeWrapper ${pkgs.nodejs}/bin/node $out/bin/teable --add-flags $out/lib/teable-cli/bin/teable.js
+          '';
+          meta.mainProgram = "teable";
         };
 
         devShells.default = pkgs.mkShell {
-          packages = [ pkgs.wrangler ];
+          packages = [
+            pkgs.wrangler
+            self.packages.${system}.teable-cli
+          ];
+          shellHook = ''
+            if [ -f .env ]; then set -a; . ./.env; set +a; fi
+          '';
         };
 
         apps.deploy = {
           type = "app";
           program = toString (
             pkgs.writeShellScript "deploy" ''
-              exec ${pkgs.wrangler}/bin/wrangler pages deploy ./site --project-name natit-dk "$@"
+              exec ${pkgs.wrangler}/bin/wrangler deploy "$@"
             ''
           );
         };
@@ -44,7 +58,7 @@
           type = "app";
           program = toString (
             pkgs.writeShellScript "dev" ''
-              exec ${pkgs.wrangler}/bin/wrangler pages dev ./site "$@"
+              exec ${pkgs.wrangler}/bin/wrangler dev "$@"
             ''
           );
         };

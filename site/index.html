@@ -1,11 +1,4 @@
 <!doctype html>
-<!--
-  Opsætning: erstat pladsholderne nedenfor.
-    LISTMONK_HOST    værtsnavnet på jeres listmonk, fx lists.natit.dk
-    LIST_UUID        listens UUID fra listmonk (Lists > listen > UUID)
-    TEABLE_FORM_URL  delingslinket til Teable-formularen (se TEABLE.md)
-  sed -i 's/LISTMONK_HOST/lists.natit.dk/; s/LIST_UUID/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/; s#TEABLE_FORM_URL#https://app.teable.ai/share/xxxxxxxx/view#g' site/index.html
--->
 <html lang="da" class="no-js">
 <head>
 <meta charset="utf-8">
@@ -120,13 +113,30 @@ h1 { font-size: clamp(2.75rem, 7.4vw, 6rem); line-height: .98; letter-spacing: -
 .field + .field { margin-top: 14px; }
 .field label { display: block; font-size: .9375rem; font-weight: 500; margin-bottom: 6px; }
 .field label span { font-weight: 400; color: var(--blaek2); }
-input[type=email], input[type=text] {
+input[type=email], input[type=text], input[type=url], input[type=number], select, textarea {
   width: 100%; height: 48px; padding: 0 14px;
   font: 400 1.0625rem var(--sans); color: var(--blaek);
   background: #fff; border: 1.5px solid var(--blaek2); border-radius: 4px;
 }
-input:focus-visible { outline: 3px solid var(--rod); outline-offset: 1px; border-color: var(--blaek); }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--rod); outline-offset: 1px; border-color: var(--blaek); }
 input[aria-invalid=true] { border-color: var(--rod); }
+textarea { height: auto; min-height: 96px; padding: 10px 14px; line-height: 1.45; resize: vertical; }
+.hint { margin: -2px 0 6px; font: 400 .875rem/1.4 var(--sans); color: var(--blaek2); }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+fieldset legend { padding: 0; margin-bottom: 6px; font: 500 .9375rem var(--sans); }
+fieldset legend span { font-weight: 400; color: var(--blaek2); }
+.checks { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.checks label, .consent { display: flex; gap: 8px; align-items: flex-start; font: 400 1rem/1.4 var(--sans); }
+input[type=checkbox], input[type=radio] { width: 20px; height: 20px; margin: 1px 0 0; flex: none; accent-color: var(--rod); }
+dialog.pop { padding: 0; border: 0; background: none; color: var(--blaek); width: min(36rem, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; }
+dialog.pop::backdrop { background: rgba(4, 30, 70, .62); }
+.pop .legend { position: relative; margin: 0; max-width: none; padding: 24px; }
+.pop h2 { margin-right: 48px; font-size: 1.75rem; line-height: 1.1; }
+.pop .sub { margin-top: 8px; font: 400 1rem/1.5 var(--sans); color: var(--blaek2); }
+.pop .field, .pop .row, .pop fieldset, .pop .consent { margin-top: 16px; }
+.pop .row .field { margin-top: 0; }
+.x { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border: 0; border-radius: 4px; background: none; color: var(--blaek); font: 400 1.75rem/1 var(--sans); cursor: pointer; }
+.x:hover { background: var(--papir); }
 .err { margin: 6px 0 0; font: 500 .9375rem/1.4 var(--sans); color: var(--rod); }
 .err:empty { display: none; }
 .row { display: grid; gap: 14px; }
@@ -139,6 +149,7 @@ input[aria-invalid=true] { border-color: var(--rod); }
 .btn:hover, button[type=submit]:hover { background: #A00E16; }
 .btn:focus-visible, button[type=submit]:focus-visible { outline: 3px solid var(--blaek); outline-offset: 3px; }
 .next { margin: 14px 0 0; font: 400 .9375rem/1.5 var(--sans); color: var(--blaek2); }
+button:disabled { opacity: .6; cursor: progress; }
 
 @media (min-width: 600px) {
   .hero-fig { height: 330px; --ph: 290px; --u: 39px; }
@@ -216,6 +227,7 @@ input[aria-invalid=true] { border-color: var(--rod); }
 .empty p { margin-top: 10px; font-size: 1.0625rem; }
 .empty .btn { align-self: flex-start; }
 .empty small { display: block; margin-top: 12px; font: 400 .9375rem var(--sans); color: var(--blaek2); }
+.empty small + p { margin-top: 32px; }
 
 footer { padding-block: 56px 64px; background: var(--blaa); color: #fff; }
 footer :focus-visible, footer .btn:focus-visible { outline-color: var(--gul); }
@@ -225,6 +237,15 @@ footer .wrap { display: grid; gap: 24px; }
 footer p { font: 400 .9375rem/1.55 var(--sans); color: rgba(255,255,255,.86); margin: 0; max-width: 64ch; }
 footer .btn { margin-top: 0; justify-self: start; background: var(--gul); color: var(--blaek); }
 footer .btn:hover { background: #fff; }
+footer form.wrap { display: block; margin-top: 40px; }
+footer .field { max-width: 30rem; }
+.inline { display: flex; gap: 8px; }
+.inline button { margin-top: 0; flex: none; }
+footer button[type=submit] { background: var(--gul); color: var(--blaek); }
+footer button[type=submit]:hover { background: #fff; }
+footer .err { color: var(--gul); }
+footer .next { color: rgba(255,255,255,.86); }
+footer a:not(.btn), .legend .next a { color: inherit; }
 
 .xmas { --blaa: #0B5130; }
 .xmas .hero::before { content: ''; position: absolute; z-index: 2; left: 0; right: 0; top: 0; height: 26px; pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 26'%3E%3Cpath d='M0 2Q24 14 48 2T96 2' fill='none' stroke='%23062a19' stroke-width='1.5'/%3E%3Cg stroke='%23062a19' stroke-width='1'%3E%3Cellipse cx='12' cy='14' rx='4' ry='6' fill='%23FF3B3B'/%3E%3Cellipse cx='36' cy='14' rx='4' ry='6' fill='%23F1EC3C'/%3E%3Cellipse cx='60' cy='14' rx='4' ry='6' fill='%236EC6FF'/%3E%3Cellipse cx='84' cy='14' rx='4' ry='6' fill='%23fff'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 96px 26px repeat-x; filter: drop-shadow(0 0 6px rgba(255,236,120,.8)); }
@@ -270,9 +291,7 @@ footer .btn:hover { background: #fff; }
     <h1 id="h1" data-jul="God jul, NatIT.">Vi kan begge dele.</h1>
     <p class="lead" data-jul="Skriv dig på listen, så hører du det, når nogen fra holdet inviterer til julefrokost.">Skriv dig på listen, så hører du det, når nogen fra holdet finder på noget.</p>
 
-    <form id="tilmeld" class="legend" method="post" action="https://LISTMONK_HOST/subscription/form">
-      <input type="hidden" name="nonce" value="">
-      <input type="hidden" name="l" value="LIST_UUID">
+    <form id="tilmeld" class="legend" method="post" action="/api/subscribe" data-done="Tak. Du er på listen.">
       <div class="row">
         <div class="field">
           <label for="email">E-mail</label>
@@ -285,7 +304,8 @@ footer .btn:hover { background: #fff; }
         </div>
       </div>
       <button type="submit">Skriv mig på listen</button>
-      <p class="next">Du får en mail med et link, som bekræfter tilmeldingen. Vi skriver kun, når der er nyt, og du kan afmelde dig i hver mail.</p>
+      <noscript><p class="err">Tilmelding kræver JavaScript. Skriv ellers til hej@natit.dk.</p></noscript>
+      <p class="next" aria-live="polite">Vi gemmer kun din e-mail og dit navn, og vi skriver kun, når der er nyt. Du kan altid <a href="#afmeld">afmelde dig</a> nederst på siden. <a href="/privatliv">Sådan passer vi på dine data</a>.</p>
     </form>
   </div>
 </section>
@@ -301,8 +321,11 @@ footer .btn:hover { background: #fff; }
       <div class="empty">
         <span class="ax y" aria-hidden="true">arrangementer</span>
         <span class="ax x" aria-hidden="true">tid</span>
-        <h3>Ingen arrangementer endnu</h3>
-        <p>Det første kræver én, der siger: jeg tager den.</p>
+        <h3>NatIT Julefrokost</h3>
+        <p><time datetime="2026-12-05T13:00">Lørdag 5. december kl. 13</time>. Sted kommer senere.</p>
+        <a class="btn" href="mailto:fest@natit.dk?subject=Tilmelding%20til%20julefrokost" data-dialog="julefrokost">Tilmeld dig</a>
+        <small>Skriv også, hvad køkkenet skal vide om kost og allergier.</small>
+        <p>Har du en idé til det næste?</p>
         <a class="btn" href="mailto:fest@natit.dk?subject=Jeg%20vil%20gerne%20arrangere%20noget%20for%20NatIT%27ere&amp;body=Hej%2C%0A%0AJeg%20vil%20gerne%20arrangere%20noget.%0A%0AHvad%3A%20%0AHvorn%C3%A5r%20og%20hvor%3A%20%0AMin%20%C3%A5rgang%20og%20mit%20spor%3A%20%0A">Jeg vil arrangere noget</a>
         <small>Åbner en mail til fest@natit.dk</small>
       </div>
@@ -320,10 +343,10 @@ footer .btn:hover { background: #fff; }
       <!-- Citaterne hentes fra Teable via /api/quotes (se TEABLE.md). Listen her vises, hvis det fejler. -->
       <ul class="strip-list">
         <li><figure><blockquote><p class="q">”Ingen er udenfor… Vi begyndte som et lille hold.”</p></blockquote><figcaption>Karina Frederiksen, studerende, i et interview på natit.ku.dk</figcaption></figure></li>
-        <li class="open"><a href="TEABLE_FORM_URL"><p class="q">Hvor endte du?</p><p class="who">Skriv dit svar her.</p></a></li>
-        <li class="open"><a href="TEABLE_FORM_URL"><p class="q">Hvad bruger du stadig fra NatIT?</p><p class="who">Skriv dit svar her, med spor og årgang.</p></a></li>
-        <li class="open"><a href="TEABLE_FORM_URL"><p class="q">Har du lavet noget, vi skal se?</p><p class="who">Send et link og to linjer om det.</p></a></li>
-        <li class="open"><a href="TEABLE_FORM_URL"><p class="q">Hvem fra holdet ser du stadig?</p><p class="who">Skriv dit svar her.</p></a></li>
+        <li class="open"><a href="mailto:hej@natit.dk?subject=Hvor%20endte%20jeg%3F" data-dialog="citat"><p class="q">Hvor endte du?</p><p class="who">Skriv dit svar her.</p></a></li>
+        <li class="open"><a href="mailto:hej@natit.dk?subject=Hvor%20endte%20jeg%3F" data-dialog="citat"><p class="q">Hvad bruger du stadig fra NatIT?</p><p class="who">Skriv dit svar her, med spor og årgang.</p></a></li>
+        <li class="open"><a href="mailto:hej@natit.dk?subject=Hvor%20endte%20jeg%3F" data-dialog="citat"><p class="q">Har du lavet noget, vi skal se?</p><p class="who">Send et link og to linjer om det.</p></a></li>
+        <li class="open"><a href="mailto:hej@natit.dk?subject=Hvor%20endte%20jeg%3F" data-dialog="citat"><p class="q">Hvem fra holdet ser du stadig?</p><p class="who">Skriv dit svar her.</p></a></li>
       </ul>
     </div>
   </div>
@@ -350,10 +373,112 @@ footer .btn:hover { background: #fff; }
 <footer>
   <div class="wrap">
     <img src="natit-logo.svg" alt="" width="64" height="44">
-    <p>natit.dk er ikke en officiel side fra Københavns Universitet. Fakta om uddannelsen er hentet fra KU's, DIKU's og UG.dk's sider, som de så ud 2010–2015, via Internet Archive.<br><span data-jul="Sneen falder med luftmodstand og vind, løst med Euler i din browser.">Resten kan løses med den harmoniske oscillator.</span></p>
+    <p>natit.dk er ikke en officiel side fra Københavns Universitet. Fakta om uddannelsen er hentet fra KU's, DIKU's og UG.dk's sider, som de så ud 2010–2015, via Internet Archive. <a href="/privatliv">Privatliv</a>.<br><span data-jul="Sneen falder med luftmodstand og vind, løst med Euler i din browser.">Resten kan løses med den harmoniske oscillator.</span></p>
     <a class="btn" href="#tilmeld">Skriv mig på listen</a>
   </div>
+  <form id="afmeld" class="wrap" method="post" action="/api/unsubscribe" data-done="Du er afmeldt. Vi sletter din e-mail, før vi skriver næste gang.">
+    <div class="field">
+      <label for="afmeld-email">Afmeld listen</label>
+      <div class="inline">
+        <input id="afmeld-email" name="email" type="email" required autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="afmeld-err">
+        <button type="submit">Afmeld</button>
+      </div>
+      <p class="err" id="afmeld-err" aria-live="polite"></p>
+    </div>
+    <noscript><p class="err">Afmelding kræver JavaScript. Skriv ellers til hej@natit.dk.</p></noscript>
+    <p class="next" aria-live="polite"><a href="/privatliv">Privatliv og dine data</a></p>
+  </form>
 </footer>
+
+<dialog id="citat" class="pop" aria-labelledby="citat-h">
+  <form class="legend" method="post" action="/api/quote" data-done="Tak! Vi læser dit svar og sætter det på siden, når vi har godkendt det.">
+    <button type="button" class="x" data-close aria-label="Luk">×</button>
+    <h2 id="citat-h">Hvor endte du?</h2>
+    <p class="sub">Dit svar kan komme i striben på forsiden. Vi læser alle svar, før de bliver vist.</p>
+    <div class="field">
+      <label for="c-citat">Dit svar</label>
+      <p class="hint" id="c-citat-hint">Hvad bruger du stadig fra NatIT, hvem ser du stadig, eller hvad har du lavet? Højst 280 tegn.</p>
+      <textarea id="c-citat" name="citat" required maxlength="280" rows="4" aria-describedby="c-citat-hint"></textarea>
+    </div>
+    <div class="field">
+      <label for="c-nu">Hvad laver du nu? <span>(valgfrit)</span></label>
+      <input id="c-nu" name="nu" type="text" maxlength="120" placeholder="fx data scientist hos X">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="c-navn">Navn</label>
+        <input id="c-navn" name="navn" type="text" required maxlength="80" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="c-aar">Årgang <span>(valgfrit)</span></label>
+        <input id="c-aar" name="aargang" type="number" min="1990" max="2100" step="1" inputmode="numeric" placeholder="fx 2012">
+      </div>
+    </div>
+    <div class="field">
+      <label for="c-spor">Spor <span>(valgfrit)</span></label>
+      <select id="c-spor" name="spor"><option value="">Vælg spor</option><option>Fysik</option><option>Geografi</option><option>Geologi</option><option>Kemi</option><option>Matematik</option><option>Molekylærbiologi og bioteknologi</option><option>Økologi og natur</option></select>
+    </div>
+    <div class="field">
+      <label for="c-link">Link til noget, du har lavet <span>(valgfrit)</span></label>
+      <input id="c-link" name="link" type="url" maxlength="500" pattern="https?://.+" placeholder="https://">
+    </div>
+    <div class="field">
+      <label for="c-email">E-mail <span>(valgfrit)</span></label>
+      <p class="hint" id="c-email-hint">Kun så vi kan kontakte dig. Vises aldrig.</p>
+      <input id="c-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="c-email-hint c-err">
+    </div>
+    <label class="consent"><input type="checkbox" name="samtykke" value="ja" required><span>Jeg giver lov til, at natit.dk viser mit navn, spor, årgang, svar og link offentligt. Min e-mail vises ikke. <a href="/privatliv">Privatliv</a></span></label>
+    <p class="err" id="c-err" aria-live="polite"></p>
+    <button type="submit">Send</button>
+    <p class="next" aria-live="polite"></p>
+  </form>
+</dialog>
+
+<dialog id="julefrokost" class="pop" aria-labelledby="jf-h">
+  <form class="legend" method="post" action="/api/signup" data-done="Tak! Du er tilmeldt. Vi skriver, når planen er klar.">
+    <input type="hidden" name="event" value="recMnXWr0zAMUocMaW2">
+    <button type="button" class="x" data-close aria-label="Luk">×</button>
+    <h2 id="jf-h">Tilmeld dig julefrokosten</h2>
+    <p class="sub">Lørdag 5. december kl. 13. Sted kommer senere.</p>
+    <div class="field">
+      <label for="j-navn">Navn</label>
+      <input id="j-navn" name="navn" type="text" required maxlength="200" autocomplete="name">
+    </div>
+    <fieldset>
+      <legend>Kommer du?</legend>
+      <div class="checks">
+        <label><input type="radio" name="kommer" value="Ja" required> Ja</label>
+        <label><input type="radio" name="kommer" value="Måske"> Måske</label>
+        <label><input type="radio" name="kommer" value="Nej"> Nej</label>
+      </div>
+    </fieldset>
+    <div class="field">
+      <label for="j-email">E-mail <span>(valgfrit)</span></label>
+      <p class="hint" id="j-email-hint">Så vi kan sende detaljer, når planen er klar.</p>
+      <input id="j-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="j-email-hint j-err">
+    </div>
+    <fieldset>
+      <legend>Kost og allergier <span>(valgfrit)</span></legend>
+      <p class="hint">Bruges kun til maden og slettes efter arrangementet.</p>
+      <div class="checks">
+        <label><input type="checkbox" name="kost" value="Vegetar"> Vegetar</label>
+        <label><input type="checkbox" name="kost" value="Vegansk"> Vegansk</label>
+        <label><input type="checkbox" name="kost" value="Glutenfri"> Glutenfri</label>
+        <label><input type="checkbox" name="kost" value="Laktosefri"> Laktosefri</label>
+        <label><input type="checkbox" name="kost" value="Nødder"> Nødder</label>
+        <label><input type="checkbox" name="kost" value="Fisk og skaldyr"> Fisk og skaldyr</label>
+        <label><input type="checkbox" name="kost" value="Intet svinekød"> Intet svinekød</label>
+      </div>
+    </fieldset>
+    <div class="field">
+      <label for="j-bem">Andet, vi skal vide? <span>(valgfrit)</span></label>
+      <textarea id="j-bem" name="bemaerkning" maxlength="1000" rows="3"></textarea>
+    </div>
+    <p class="err" id="j-err" aria-live="polite"></p>
+    <button type="submit">Tilmeld mig</button>
+    <p class="next" aria-live="polite"></p>
+  </form>
+</dialog>
 
 <script>
 (() => {
@@ -379,19 +504,50 @@ footer .btn:hover { background: #fff; }
     return [s[0] + h / 6 * (a[0] + 2 * b[0] + 2 * c[0] + d[0]), s[1] + h / 6 * (a[1] + 2 * b[1] + 2 * c[1] + d[1])];
   };
 
-  const form = document.getElementById('tilmeld');
-  const email = document.getElementById('email');
-  const err = document.getElementById('email-err');
-  const check = () => {
-    const v = email.value.trim();
-    const msg = !v ? 'Skriv din e-mailadresse.' : email.validity.typeMismatch || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? 'Det ligner ikke en e-mailadresse. Tjek, at der står fx navn@domæne.dk.' : '';
-    err.textContent = msg;
-    email.setAttribute('aria-invalid', msg ? 'true' : 'false');
-    return !msg;
-  };
-  form.addEventListener('submit', e => { if (!check()) { e.preventDefault(); email.focus(); } });
-  email.addEventListener('input', () => { if (email.getAttribute('aria-invalid') === 'true') check(); });
-  form.noValidate = true;
+  for (const form of document.querySelectorAll('form[data-done]')) {
+    const { done } = form.dataset;
+    const email = form.querySelector('input[type=email]');
+    const err = form.querySelector('.err');
+    const next = form.querySelector('.next');
+    const btn = form.querySelector('button[type=submit]');
+    const check = () => {
+      const v = email.value.trim();
+      const msg = !v ? (email.required ? 'Skriv din e-mailadresse.' : '') : email.validity.typeMismatch || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? 'Det ligner ikke en e-mailadresse. Tjek, at der står fx navn@domæne.dk.' : '';
+      err.textContent = msg;
+      email.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      return !msg;
+    };
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!check()) return email.focus();
+      if (!form.reportValidity()) return;
+      btn.disabled = true;
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+        if (!res.ok) throw res.status;
+        form.reset();
+        next.textContent = done;
+        next.scrollIntoView({ block: 'nearest' });
+      } catch (status) {
+        err.textContent = status === 429 ? 'Du har prøvet mange gange på kort tid. Vent et minut, og prøv igen.' : 'Det gik ikke. Prøv igen, eller skriv til hej@natit.dk.';
+      }
+      btn.disabled = false;
+    });
+    email.addEventListener('input', () => { if (email.getAttribute('aria-invalid') === 'true') check(); });
+    form.noValidate = true;
+  }
+  document.addEventListener('click', e => {
+    const open = e.target.closest('[data-dialog]');
+    if (open) {
+      const d = document.getElementById(open.dataset.dialog), q = open.querySelector('.q');
+      if (q) d.querySelector('h2').textContent = q.textContent;
+      d.querySelector('.next').textContent = d.querySelector('.err').textContent = '';
+      e.preventDefault();
+      d.showModal();
+    } else if (e.target.closest('[data-close]') || e.target.localName === 'dialog') e.target.closest('dialog').close();
+  });
+  const linked = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (linked?.localName === 'dialog') linked.showModal();
 
   const vdp = s => [s[1], 1.0 * (1 - s[0] * s[0]) * s[1] - s[0]];
   const phase = document.getElementById('phase');
