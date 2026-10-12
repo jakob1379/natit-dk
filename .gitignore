@@ -5,3 +5,4 @@ result
 .dev.vars
 .env
 .teable/
+private/
