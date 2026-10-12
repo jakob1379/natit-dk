@@ -57,7 +57,7 @@ test('quote needs consent, never sets Godkendt, and rejects unsafe links and unk
 test('signup links the event, keeps only known diet choices, and refuses closed events', async () => {
   const calls = stub(created);
   const ok = { navn: 'B', kommer: 'Ja', event: 'recMnXWr0zAMUocMaW2', kost: ['Vegetar', 'Nødder'] };
-  assert.deepEqual(to(await post(signup, ok)), [303, '/julefrokost#tak']);
+  assert.deepEqual(to(await post(signup, ok)), [303, '/#tak-tilmelding']);
   assert.deepEqual(sent(calls), { fldbQRz7MyIYFrvjAOa: 'B', fldZBYy9loY1AKCMFp8: { id: 'recMnXWr0zAMUocMaW2' }, fldPl4G6NSeaLAwYIwn: 'Ja', fldZi27oUycy6ltbo3o: ['Vegetar', 'Nødder'] });
   assert.deepEqual(to(await post(signup, { ...ok, kost: ['Gift'] })), [303, '/fejl']);
   assert.deepEqual(to(await post(signup, { ...ok, kommer: 'Altid' })), [303, '/fejl']);

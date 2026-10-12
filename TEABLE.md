@@ -8,10 +8,10 @@ Alt ligger i projektet `natit` (`bseLsvahSoCF1OWvlOM`) på https://app.teable.ai
 | `Mailliste` | `tblc0NbT3ShlCxvUuPN` | Tilmelding til maillisten | `POST /api/subscribe` |
 | `Afmeldinger` | `tblQF46ewA23Jf3XTDC` | Afmelding fra maillisten | `POST /api/unsubscribe` |
 | `Arrangementer` | `tbldAIQvH0lucSpwhjo` | Julefrokost og andre arrangementer | kun os, i Teable |
-| `Tilmeldinger` | `tblDziiPvSXuOwfHtmM` | Tilmeldinger til alle arrangementer | `natit.dk/julefrokost`, `POST /api/signup` |
+| `Tilmeldinger` | `tblDziiPvSXuOwfHtmM` | Tilmeldinger til alle arrangementer | popuppen på forsiden (`natit.dk/julefrokost` åbner den), `POST /api/signup` |
 
 - Koden: `worker.js` sender `/api/*` videre til modulerne i `api/` og bygger forsiden med `api/page.js`: citaterne og juletemaet sættes ind på serveren. Alt andet serveres direkte fra `site/`.
-- Siden virker uden JavaScript. Formularerne er almindelige HTML-formularer, popuppen er HTML `popover`, og efter indsendelse sender serveren folk videre til en bekræftelse (`/#tilmeldt`, `/#afmeldt`, `/#tak-citat`, `/julefrokost#tak`) eller til `/fejl`. JavaScript bruges kun til animationerne.
+- Siden virker uden JavaScript. Formularerne er almindelige HTML-formularer, popuppen er HTML `popover`, og efter indsendelse sender serveren folk videre til en bekræftelse (`/#tilmeldt`, `/#afmeldt`, `/#tak-citat`, `/#tak-tilmelding`) eller til `/fejl`. JavaScript bruges kun til animationerne og til at åbne tilmeldingen direkte fra `/julefrokost`.
 - Workeren skriver på felt-ID'er. Felter må gerne omdøbes, men ikke slettes. `api/quotes.js` læser dog `Citater` på feltnavn, så de felter må ikke omdøbes.
 - Teable fra terminalen: `nix develop -c teable table get --base-id bseLsvahSoCF1OWvlOM` (Teables officielle CLI). Dev-shellen læser `TEABLE_PAT` fra `.env`, som er i `.gitignore`. Den nøgle må ikke genbruges som sidens `TEABLE_TOKEN`. Agent-skill: `teableio/agent-skills` (`teable-assistant-ops`).
 - Privatlivssiden er `site/privatliv.html` (`natit.dk/privatliv`). Opdatér den, hvis vi gemmer noget nyt eller skifter leverandør.
@@ -81,7 +81,7 @@ Citaterne i striben under "Hvor endte du?" hentes af `api/quotes.js` og sættes 
 
 # Maillisten
 
-Tilmelding står øverst på siden, afmelding nederst (`natit.dk/#afmeld`).
+Tilmelding og afmelding er den samme formular øverst på siden (`natit.dk/#tilmeld`): knappen `Afmeld` sender e-mailen til `/api/unsubscribe`.
 
 - `Mailliste`: `E-mail` (unik), `Navn`, `Tilmeldt`. `Afmeldinger`: `E-mail`, `Modtaget`.
 - E-mails gemmes med små bogstaver. En tilmelding med en adresse, der allerede står på listen, svarer "Tak" uden at oprette en ny række, så siden ikke afslører, hvem der er tilmeldt.
@@ -91,7 +91,7 @@ Tilmelding står øverst på siden, afmelding nederst (`natit.dk/#afmeld`).
 1. Gå `Afmeldinger` igennem: slet den matchende række i `Mailliste`, og slet afmeldingen. Privatlivssiden lover, at e-mailen slettes.
 2. Kig `Mailliste` igennem for spam, og kopiér `E-mail` ind i **Bcc**. Aldrig Til eller Cc.
 3. Send fra Gmail med `Reply-To: hej@natit.dk`. Gmail tillader ca. 500 modtagere om dagen.
-4. Slut hver mail med: *Vil du ikke have flere mails? Afmeld dig på https://natit.dk/#afmeld*.
+4. Slut hver mail med: *Vil du ikke have flere mails? Afmeld dig på https://natit.dk/#tilmeld*.
 
 # Arrangementer
 
@@ -102,14 +102,14 @@ Tilmelding står øverst på siden, afmelding nederst (`natit.dk/#afmeld`).
 | `Arrangementer` | `Navn`, `Dato`, `Sted`, `Beskrivelse`, `Tilmelding åben`, `Tilmeldinger` (link), `Kommer` og `Måske` (antal) |
 | `Tilmeldinger` | `Navn`, `Arrangement` (link), `Kommer` (Ja/Måske/Nej), `E-mail`, `Kost og allergier`, `Bemærkning`, `Tilmeldt` |
 
-- [x] NatIT Julefrokost 2026 (`recMnXWr0zAMUocMaW2`): lørdag 5. december 2026 kl. 13, sted tba, tilmelding åben. Kortet på forsiden og siden `site/julefrokost.html` er sat op.
+- [x] NatIT Julefrokost 2026 (`recMnXWr0zAMUocMaW2`): lørdag 5. december 2026 kl. 13, sted tba, tilmelding åben. Kortet og tilmeldings-popuppen (`#jul`) på forsiden er sat op.
 - [ ] Sæt linket ind i Facebook-begivenheden: https://natit.dk/julefrokost
-- [ ] Opdatér `Sted` i Teable, på kortet i `site/index.html` og i `site/julefrokost.html`, når det er på plads.
-- [ ] Efter 5. december: fjern `Tilmelding åben`, slet `Kost og allergier` og `Bemærkning` på tilmeldingerne (helbredsoplysninger, lovet slettet i formularen), og fjern kortet fra `site/index.html` og siden `site/julefrokost.html`.
+- [ ] Opdatér `Sted` i Teable, på kortet og i popuppen i `site/index.html`, når det er på plads.
+- [ ] Efter 5. december: fjern `Tilmelding åben`, slet `Kost og allergier` og `Bemærkning` på tilmeldingerne (helbredsoplysninger, lovet slettet i formularen), og fjern kortet og popuppen `#jul` fra `site/index.html` og linjen i `site/_redirects`.
 
 ## Sådan bruges det
 
-- Nyt arrangement: opret en række i `Arrangementer`, sæt `Tilmelding åben`, kopiér kortet i `site/index.html`, og kopiér `site/julefrokost.html` til en ny side med det nye record-ID i `name="event"`.
+- Nyt arrangement: opret en række i `Arrangementer`, sæt `Tilmelding åben`, kopiér kortet i `site/index.html`, og kopiér popuppen `#jul` med et nyt id og det nye record-ID i `name="event"`.
 - Workeren afviser tilmeldinger til arrangementer, hvor `Tilmelding åben` ikke er sat. Luk tilmeldingen ved at fjerne fluebenet. Tilmeldingerne bliver stående.
 - Gæsteliste og allergier: lav en view af `Tilmeldinger` filtreret på `Arrangement` og `Kommer` = Ja.
 - Via API: filtrér på arrangementets record-ID, fx `{"conjunction":"and","filterSet":[{"fieldId":"Arrangement","operator":"is","value":"recMnXWr0zAMUocMaW2"}]}` med `fieldKeyType=name`.

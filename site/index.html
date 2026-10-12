@@ -176,28 +176,19 @@ h1 { font-size: clamp(2.75rem, 7.4vw, 6rem); line-height: .98; letter-spacing: -
 .empty .ax.y { left: -4px; top: -26px; }
 .empty .ax.x { right: 0; bottom: -30px; }
 .empty h3 { font-size: 1.5rem; }
-.empty p { margin-top: 10px; font-size: 1.0625rem; }
+.empty p { margin: 10px 0 0; font-size: 1.0625rem; }
 .empty .btn { align-self: flex-start; }
-.empty small { display: block; margin-top: 12px; font: 400 .9375rem var(--sans); color: var(--blaek2); }
-.empty small + p { margin-top: 32px; }
+.empty hr { width: 100%; margin: 28px 0 18px; border: 0; border-top: 1.5px dashed var(--blaek2); }
 
 footer { padding-block: 56px 64px; background: var(--blaa); color: #fff; }
-footer :focus-visible, footer .btn:focus-visible { outline-color: var(--gul); }
+footer :focus-visible { outline-color: var(--gul); }
 footer img { width: 64px; height: auto; display: block; }
 footer .wrap { display: grid; gap: 24px; }
-@media (min-width: 820px) { footer .wrap { grid-template-columns: auto 1fr auto; align-items: center; gap: 32px; } }
+@media (min-width: 820px) { footer .wrap { grid-template-columns: auto 1fr; align-items: center; gap: 32px; } }
 footer p { font: 400 .9375rem/1.55 var(--sans); color: rgba(255,255,255,.86); margin: 0; max-width: 64ch; }
-footer .btn { margin-top: 0; justify-self: start; background: var(--gul); color: var(--blaek); }
-footer .btn:hover { background: #fff; }
-footer form.wrap { display: block; margin-top: 40px; }
-footer .field { max-width: 30rem; }
-.inline { display: flex; gap: 8px; }
-.inline button { margin-top: 0; flex: none; }
-footer button[type=submit] { background: var(--gul); color: var(--blaek); }
-footer button[type=submit]:hover { background: #fff; }
-footer .ok { color: var(--gul); }
-footer .next { color: rgba(255,255,255,.86); }
-footer a:not(.btn), .legend .next a { color: inherit; }
+.afmeld { min-height: 50px; margin: 16px 0 0 8px; padding: 0 12px; border: 0; border-radius: 4px; background: none; color: var(--blaek2); font: 500 1rem/1 var(--sans); text-decoration: underline; cursor: pointer; }
+.afmeld:hover { color: var(--blaek); }
+footer a, .legend .next a { color: inherit; }
 
 .xmas { --blaa: #0B5130; }
 .xmas .hero::before { content: ''; position: absolute; z-index: 2; left: 0; right: 0; top: 0; height: 26px; pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 26'%3E%3Cpath d='M0 2Q24 14 48 2T96 2' fill='none' stroke='%23062a19' stroke-width='1.5'/%3E%3Cg stroke='%23062a19' stroke-width='1'%3E%3Cellipse cx='12' cy='14' rx='4' ry='6' fill='%23FF3B3B'/%3E%3Cellipse cx='36' cy='14' rx='4' ry='6' fill='%23F1EC3C'/%3E%3Cellipse cx='60' cy='14' rx='4' ry='6' fill='%236EC6FF'/%3E%3Cellipse cx='84' cy='14' rx='4' ry='6' fill='%23fff'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 96px 26px repeat-x; filter: drop-shadow(0 0 6px rgba(255,236,120,.8)); }
@@ -237,7 +228,7 @@ footer a:not(.btn), .legend .next a { color: inherit; }
   <figure class="hero-fig">
     <svg id="phase" aria-hidden="true"></svg>
     <img class="hero-logo" src="natit-logo.svg" alt="NatIT">
-    <figcaption aria-hidden="true"><span class="fn">Fig. 1.</span><span data-jul="Van der Pol-oscillatoren med julelys på grænsecyklen. Alle baner finder hjem til jul, uanset hvor de starter.">Van der Pol-oscillatoren, løst med Runge–Kutta i din browser. Alle baner finder ind i det samme kredsløb, uanset hvor de starter.</span></figcaption>
+    <figcaption aria-hidden="true"><span class="fn">Fig. 1.</span><span data-jul="Van der Pol-oscillatoren med julelys på grænsecyklen.">Van der Pol-oscillatoren, løst med Runge–Kutta i din browser.</span></figcaption>
   </figure>
   <div class="wrap hero-text">
     <h1 id="h1" data-jul="God jul, NatIT.">Vi kan begge dele.</h1>
@@ -255,8 +246,10 @@ footer a:not(.btn), .legend .next a { color: inherit; }
         </div>
       </div>
       <button type="submit">Skriv mig på listen</button>
+      <button class="afmeld" formaction="/api/unsubscribe">Afmeld</button>
       <p class="ok" id="tilmeldt">Tak. Du er på listen.</p>
-      <p class="next" aria-live="polite">Vi gemmer kun din e-mail og dit navn, og vi skriver kun, når der er nyt. Du kan altid <a href="#afmeld">afmelde dig</a> nederst på siden. <a href="/privatliv">Sådan passer vi på dine data</a>.</p>
+      <p class="ok" id="afmeldt">Du er afmeldt. Vi sletter din e-mail, før vi skriver næste gang.</p>
+      <p class="next" aria-live="polite">Vi gemmer kun din e-mail og dit navn, og vi skriver kun, når der er nyt. <a href="/privatliv">Sådan passer vi på dine data</a>.</p>
     </form>
   </div>
 </section>
@@ -272,13 +265,13 @@ footer a:not(.btn), .legend .next a { color: inherit; }
       <div class="empty">
         <span class="ax y" aria-hidden="true">arrangementer</span>
         <span class="ax x" aria-hidden="true">tid</span>
-        <h3>NatIT Julefrokost</h3>
+        <h3 id="julefrokost">NatIT Julefrokost</h3>
         <p><time datetime="2026-12-05T13:00">Lørdag 5. december kl. 13</time>. Sted kommer senere.</p>
-        <a class="btn" href="/julefrokost">Tilmeld dig</a>
-        <small>Skriv også, hvad køkkenet skal vide om kost og allergier.</small>
+        <p class="ok" id="tak-tilmelding">Tak! Du er tilmeldt. Vi skriver, når planen er klar.</p>
+        <button type="button" class="btn" popovertarget="jul">Tilmeld dig</button>
+        <hr>
         <p>Har du en idé til det næste?</p>
         <a class="btn" href="mailto:fest@natit.dk?subject=Jeg%20vil%20gerne%20arrangere%20noget%20for%20NatIT%27ere&amp;body=Hej%2C%0A%0AJeg%20vil%20gerne%20arrangere%20noget.%0A%0AHvad%3A%20%0AHvorn%C3%A5r%20og%20hvor%3A%20%0AMin%20%C3%A5rgang%20og%20mit%20spor%3A%20%0A">Jeg vil arrangere noget</a>
-        <small>Åbner en mail til fest@natit.dk</small>
       </div>
     </div>
   </div>
@@ -326,20 +319,54 @@ footer a:not(.btn), .legend .next a { color: inherit; }
   <div class="wrap">
     <img src="natit-logo.svg" alt="" width="64" height="44">
     <p>natit.dk er ikke en officiel side fra Københavns Universitet. Fakta om uddannelsen er hentet fra KU's, DIKU's og UG.dk's sider, som de så ud 2010–2015, via Internet Archive. <a href="/privatliv">Privatliv</a>.<br><span data-jul="Sneen falder med luftmodstand og vind, løst med Euler i din browser.">Resten kan løses med den harmoniske oscillator.</span></p>
-    <a class="btn" href="#tilmeld">Skriv mig på listen</a>
   </div>
-  <form id="afmeld" class="wrap" method="post" action="/api/unsubscribe">
-    <div class="field">
-      <label for="afmeld-email">Afmeld listen</label>
-      <div class="inline">
-        <input id="afmeld-email" name="email" type="email" required autocomplete="email" inputmode="email" spellcheck="false">
-        <button type="submit">Afmeld</button>
-      </div>
-    </div>
-    <p class="ok" id="afmeldt">Du er afmeldt. Vi sletter din e-mail, før vi skriver næste gang.</p>
-    <p class="next" aria-live="polite"><a href="/privatliv">Privatliv og dine data</a></p>
-  </form>
 </footer>
+
+<div id="jul" class="pop" popover role="dialog" aria-labelledby="jul-h">
+  <form class="legend stack" method="post" action="/api/signup">
+    <button type="button" class="luk" popovertarget="jul" popovertargetaction="hide" aria-label="Luk">×</button>
+    <h2 id="jul-h">NatIT Julefrokost</h2>
+    <p class="sub"><time datetime="2026-12-05T13:00">Lørdag 5. december kl. 13</time>. Sted kommer senere.</p>
+    <input type="hidden" name="event" value="recMnXWr0zAMUocMaW2">
+    <div class="field">
+      <label for="j-navn">Navn</label>
+      <input id="j-navn" name="navn" type="text" required maxlength="200" autocomplete="name">
+    </div>
+    <fieldset>
+      <legend>Kommer du?</legend>
+      <div class="checks">
+        <label><input type="radio" name="kommer" value="Ja" required> Ja</label>
+        <label><input type="radio" name="kommer" value="Måske"> Måske</label>
+        <label><input type="radio" name="kommer" value="Nej"> Nej</label>
+      </div>
+    </fieldset>
+    <div class="field">
+      <label for="j-email">E-mail <span>(valgfrit)</span></label>
+      <p class="hint" id="j-email-hint">Så vi kan sende detaljer, når planen er klar.</p>
+      <input id="j-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="j-email-hint">
+    </div>
+    <fieldset>
+      <legend>Kost og allergier <span>(valgfrit)</span></legend>
+      <p class="hint">Bruges kun til maden og slettes efter arrangementet.</p>
+      <div class="checks">
+        <label><input type="checkbox" name="kost" value="Vegetar"> Vegetar</label>
+        <label><input type="checkbox" name="kost" value="Vegansk"> Vegansk</label>
+        <label><input type="checkbox" name="kost" value="Glutenfri"> Glutenfri</label>
+        <label><input type="checkbox" name="kost" value="Laktosefri"> Laktosefri</label>
+        <label><input type="checkbox" name="kost" value="Nødder"> Nødder</label>
+        <label><input type="checkbox" name="kost" value="Fisk og skaldyr"> Fisk og skaldyr</label>
+        <label><input type="checkbox" name="kost" value="Intet svinekød"> Intet svinekød</label>
+      </div>
+    </fieldset>
+    <div class="field">
+      <label for="j-bem">Andet, vi skal vide? <span>(valgfrit)</span></label>
+      <textarea id="j-bem" name="bemaerkning" maxlength="1000" rows="3"></textarea>
+    </div>
+    <button type="submit">Tilmeld mig</button>
+    <p class="next">Du kan tilmelde dig igen, hvis dit svar ændrer sig. Vi bruger dit nyeste svar. <a href="/privatliv">Privatliv</a></p>
+  </form>
+</div>
+<script>if (location.hash === '#julefrokost') document.getElementById('jul').showPopover()</script>
 
 <div id="citat" class="pop" popover role="dialog" aria-labelledby="citat-h">
   <form class="legend stack" method="post" action="/api/quote">
