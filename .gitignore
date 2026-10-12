@@ -2,7 +2,8 @@
 .wrangler/
 result
 .backup/
-.dev.vars
-.env
+.dev.vars*
+.env*
 .teable/
 private/
+*~

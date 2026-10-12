@@ -22,9 +22,9 @@ Siden er en Cloudflare Worker med statiske filer, sat op i `wrangler.toml`: dom�
 
 - [ ] `natit.dk` skal være en zone på den Cloudflare-konto, der deployer. Ved første deploy opretter Cloudflare selv DNS-record og certifikat. Der må ikke ligge en CNAME på `natit.dk` i forvejen.
 - [ ] Slå Cloudflares gratis beskyttelse til på zonen: **Security**, **Bots**, **Bot Fight Mode**.
-- [ ] Opret Teable-tokenet (se nedenfor), og gem det som secret:
+- [ ] Opret Teable-tokenet (se nedenfor), og sæt det ind efter `TEABLE_TOKEN=` i `.dev.vars`. Filen ligger klar i roden af repoet og er i `.gitignore`. Send det så til Cloudflare:
   ```sh
-  nix develop -c wrangler secret put TEABLE_TOKEN
+  nix develop -c wrangler secret bulk .dev.vars
   ```
   `TEABLE_TABLE_ID` står i `wrangler.toml`, for det er ikke en hemmelighed.
 - [ ] Deploy: `nix run .#deploy`.
@@ -41,10 +41,7 @@ Siden er en Cloudflare Worker med statiske filer, sat op i `wrangler.toml`: dom�
 
 ## Test lokalt
 
-- [ ] Opret `.dev.vars` i roden af repoet. Den er i `.gitignore`:
-  ```
-  TEABLE_TOKEN=...
-  ```
+- [ ] `.dev.vars` er den samme fil som ovenfor. `wrangler dev` læser den selv.
 - [ ] `nix run .#dev`, åbn http://localhost:8787. Formularerne skriver til de rigtige tabeller, så slet testrækkerne bagefter.
 - [x] Kør testene med `node --test api/*.test.mjs`.
 - Rate limit og cache gemmes i `.wrangler/state`. Slet mappen for at nulstille dem.
