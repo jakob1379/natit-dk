@@ -31,7 +31,12 @@ export async function list({ request, env, waitUntil }, name, tableId, map) {
   }
 }
 
-export const handler = (tableId, done, parse, allow) => async ({ request, env }) => {
+const create = async (env, tableId, fields) => {
+  const res = await teable(env, `/api/table/${tableId}/record`, { method: 'POST', body: JSON.stringify({ fieldKeyType: 'id', records: [{ fields }] }) });
+  if (!res.ok && (await res.json().catch(() => ({}))).data?.domainCode !== 'validation.field.unique') throw new Error(`Teable ${res.status}`);
+};
+
+export const handler = (tableId, done, parse, allow, write = create) => async ({ request, env }) => {
   if (+request.headers.get('content-length') > 8192) return go(request, '/fejl');
   let form;
   try { form = await request.formData(); } catch { return go(request, '/fejl'); }
@@ -43,8 +48,7 @@ export const handler = (tableId, done, parse, allow) => async ({ request, env })
   }
   try {
     if (allow && !(await allow(fields, env))) return go(request, '/fejl');
-    const res = await teable(env, `/api/table/${tableId}/record`, { method: 'POST', body: JSON.stringify({ fieldKeyType: 'id', records: [{ fields }] }) });
-    if (!res.ok && (await res.json().catch(() => ({}))).data?.domainCode !== 'validation.field.unique') throw new Error(`Teable ${res.status}`);
+    await write(env, tableId, fields);
     return go(request, done);
   } catch (e) {
     console.error('form:', e.message);

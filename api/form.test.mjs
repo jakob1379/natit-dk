@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { onRequestPost as subscribe } from './subscribe.js';
 import { onRequestPost as quote } from './quote.js';
 import { onRequestPost as signup } from './signup.js';
+import { onRequestPost as unsubscribe } from './unsubscribe.js';
 
 const env = { TEABLE_TOKEN: 't' };
 const post = (handler, fields, e = env) => {
@@ -63,4 +64,16 @@ test('signup links the event, keeps only known diet choices, and refuses closed 
   assert.deepEqual(to(await post(signup, { ...ok, kommer: 'Altid' })), [303, '/fejl']);
   stub(created, { fields: {} });
   assert.deepEqual(to(await post(signup, ok)), [303, '/fejl']);
+});
+
+test('unsubscribe deletes every Mailliste row with that email, and unknown emails look the same', async () => {
+  let calls = stub(() => new Response(null, { status: 200 }), { records: [{ id: 'rec1' }, { id: 'rec2' }] });
+  assert.deepEqual(to(await post(unsubscribe, { email: ' A@B.dk ' })), [303, '/#afmeldt']);
+  assert.match(decodeURIComponent(calls[0].url), /"value":"a@b\.dk"/);
+  assert.deepEqual(calls.slice(1).map(c => [c.init.method, c.url.split('/').pop()]), [['DELETE', 'rec1'], ['DELETE', 'rec2']]);
+  calls = stub(created, { records: [] });
+  assert.deepEqual(to(await post(unsubscribe, { email: 'x@y.dk' })), [303, '/#afmeldt']);
+  assert.equal(calls.length, 1);
+  stub(() => Response.json({}, { status: 403 }), { records: [{ id: 'rec1' }] });
+  assert.deepEqual(to(await post(unsubscribe, { email: 'a@b.dk' })), [303, '/fejl']);
 });

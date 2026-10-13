@@ -6,7 +6,6 @@ Alt ligger i projektet `natit` (`bseLsvahSoCF1OWvlOM`) på https://app.teable.ai
 | - | - | - | - |
 | `Citater` | `tblFW1AiHL2M6sQvuZd` | Citaterne under "Hvor endte du?" | popup, `POST /api/quote` |
 | `Mailliste` | `tblc0NbT3ShlCxvUuPN` | Tilmelding til maillisten | `POST /api/subscribe` |
-| `Afmeldinger` | `tblQF46ewA23Jf3XTDC` | Afmelding fra maillisten | `POST /api/unsubscribe` |
 | `Arrangementer` | `tbldAIQvH0lucSpwhjo` | Julefrokost og andre arrangementer | kun os, i Teable |
 | `Tilmeldinger` | `tblDziiPvSXuOwfHtmM` | Tilmeldinger til alle arrangementer | popuppen på forsiden (`natit.dk/julefrokost` åbner den), `POST /api/signup` |
 
@@ -35,7 +34,9 @@ Siden er en Cloudflare Worker med statiske filer, sat op i `wrangler.toml`: dom�
 ## Teable-token
 
 - [ ] Opret et Personal Access Token på https://app.teable.ai/setting/personal-access-token.
-- [ ] Scope: `record|read` og `record|create`. Adgang: kun projektet `natit`. Læse-scopet bruges af citaterne og til at tjekke, om et arrangement er åbent. Opret-scopet bruges af formularerne.
+- [ ] Scope: `record|read`, `record|create` og `record|delete`. Adgang: kun projektet `natit`. Læse-scopet bruges til citaterne, til arrangementerne på forsiden, til at tjekke, om et arrangement er åbent, og til at finde din række, når du afmelder dig. Opret-scopet bruges af formularerne. Slet-scopet bruges kun af `Afmeld`.
+- [ ] Det nuværende token har ikke `record|delete`. Tilføj det, før næste deploy, ellers ender `Afmeld` på `/fejl`.
+- [ ] Én gang efter skiftet: gå de gamle rækker i `Afmeldinger` (`tblQF46ewA23Jf3XTDC`) igennem, slet de matchende rækker i `Mailliste`, og slet så tabellen `Afmeldinger`.
 - [ ] Vælg en udløbsdato, og sæt en påmindelse. Udløbsdatoen kan ikke ændres bagefter. Når tokenet udløber, viser siden kun de faste citater, og formularerne fejler.
 - Tokenet vises kun én gang. Det må ikke lægges i git, i chat eller i `index.html`.
 
@@ -81,17 +82,16 @@ Citaterne i striben under "Hvor endte du?" hentes af `api/quotes.js` og sættes 
 
 # Maillisten
 
-Tilmelding og afmelding er den samme formular øverst på siden (`natit.dk/#tilmeld`): knappen `Afmeld` sender e-mailen til `/api/unsubscribe`.
+Tilmelding og afmelding er den samme formular øverst på siden (`natit.dk/#tilmeld`): knappen `Afmeld` sender e-mailen til `/api/unsubscribe`, som sletter rækken i `Mailliste` med det samme. Svaret er det samme, uanset om e-mailen stod på listen.
 
-- `Mailliste`: `E-mail` (unik), `Navn`, `Tilmeldt`. `Afmeldinger`: `E-mail`, `Modtaget`.
+- `Mailliste`: `E-mail` (unik), `Navn`, `Tilmeldt`.
 - E-mails gemmes med små bogstaver. En tilmelding med en adresse, der allerede står på listen, svarer "Tak" uden at oprette en ny række, så siden ikke afslører, hvem der er tilmeldt.
 
 ## Før hver udsendelse
 
-1. Gå `Afmeldinger` igennem: slet den matchende række i `Mailliste`, og slet afmeldingen. Privatlivssiden lover, at e-mailen slettes.
-2. Kig `Mailliste` igennem for spam, og kopiér `E-mail` ind i **Bcc**. Aldrig Til eller Cc.
-3. Send fra Gmail med `Reply-To: hej@natit.dk`. Gmail tillader ca. 500 modtagere om dagen.
-4. Slut hver mail med: *Vil du ikke have flere mails? Afmeld dig på https://natit.dk/#tilmeld*.
+1. Kig `Mailliste` igennem for spam, og kopiér `E-mail` ind i **Bcc**. Aldrig Til eller Cc.
+2. Send fra Gmail med `Reply-To: hej@natit.dk`. Gmail tillader ca. 500 modtagere om dagen.
+3. Slut hver mail med: *Vil du ikke have flere mails? Afmeld dig på https://natit.dk/#tilmeld*.
 
 # Arrangementer
 
