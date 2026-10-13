@@ -10,9 +10,9 @@ Alt ligger i projektet `natit` (`bseLsvahSoCF1OWvlOM`) på https://app.teable.ai
 | `Arrangementer` | `tbldAIQvH0lucSpwhjo` | Julefrokost og andre arrangementer | kun os, i Teable |
 | `Tilmeldinger` | `tblDziiPvSXuOwfHtmM` | Tilmeldinger til alle arrangementer | popuppen på forsiden (`natit.dk/julefrokost` åbner den), `POST /api/signup` |
 
-- Koden: `worker.js` sender `/api/*` videre til modulerne i `api/` og bygger forsiden med `api/page.js`: citaterne og juletemaet sættes ind på serveren. Alt andet serveres direkte fra `site/`.
-- Siden virker uden JavaScript. Formularerne er almindelige HTML-formularer, popuppen er HTML `popover`, og efter indsendelse sender serveren folk videre til en bekræftelse (`/#tilmeldt`, `/#afmeldt`, `/#tak-citat`, `/#tak-tilmelding`) eller til `/fejl`. JavaScript bruges kun til animationerne og til at åbne tilmeldingen direkte fra `/julefrokost`.
-- Workeren skriver på felt-ID'er. Felter må gerne omdøbes, men ikke slettes. `api/quotes.js` læser dog `Citater` på feltnavn, så de felter må ikke omdøbes.
+- Koden: `worker.js` sender `/api/*` videre til modulerne i `api/` og bygger forsiden med `api/page.js`: citaterne, arrangementerne og juletemaet sættes ind på serveren. Alt andet serveres direkte fra `site/`.
+- Siden virker uden JavaScript. Formularerne er almindelige HTML-formularer, popuppen er HTML `popover`, og efter indsendelse sender serveren folk videre til en bekræftelse (`/#tilmeldt`, `/#afmeldt`, `/#tak-citat`, `/#tak-tilmelding`) eller til `/fejl`. JavaScript bruges kun til animationerne og til at åbne tilmeldingen direkte fra `/julefrokost` (som sender videre til `/#arrangementer`).
+- Workeren skriver på felt-ID'er. Felter må gerne omdøbes, men ikke slettes. `api/quotes.js` og `api/events.js` læser dog `Citater` og `Arrangementer` på feltnavn, så de felter må ikke omdøbes.
 - Teable fra terminalen: `nix develop -c teable table get --base-id bseLsvahSoCF1OWvlOM` (Teables officielle CLI). Dev-shellen læser `TEABLE_PAT` fra `.env`, som er i `.gitignore`. Den nøgle må ikke genbruges som sidens `TEABLE_TOKEN`. Agent-skill: `teableio/agent-skills` (`teable-assistant-ops`).
 - Privatlivssiden er `site/privatliv.html` (`natit.dk/privatliv`). Opdatér den, hvis vi gemmer noget nyt eller skifter leverandør.
 
@@ -102,14 +102,15 @@ Tilmelding og afmelding er den samme formular øverst på siden (`natit.dk/#tilm
 | `Arrangementer` | `Navn`, `Dato`, `Sted`, `Beskrivelse`, `Tilmelding åben`, `Tilmeldinger` (link), `Kommer` og `Måske` (antal) |
 | `Tilmeldinger` | `Navn`, `Arrangement` (link), `Kommer` (Ja/Måske/Nej), `E-mail`, `Kost og allergier`, `Bemærkning`, `Tilmeldt` |
 
-- [x] NatIT Julefrokost 2026 (`recMnXWr0zAMUocMaW2`): lørdag 5. december 2026 kl. 13, sted tba, tilmelding åben. Kortet og tilmeldings-popuppen (`#jul`) på forsiden er sat op.
+- [x] NatIT Julefrokost 2026 (`recMnXWr0zAMUocMaW2`): lørdag 5. december 2026 kl. 13, sted tba, tilmelding åben. Vises automatisk på forsiden.
 - [ ] Sæt linket ind i Facebook-begivenheden: https://natit.dk/julefrokost
-- [ ] Opdatér `Sted` i Teable, på kortet og i popuppen i `site/index.html`, når det er på plads.
-- [ ] Efter 5. december: fjern `Tilmelding åben`, slet `Kost og allergier` og `Bemærkning` på tilmeldingerne (helbredsoplysninger, lovet slettet i formularen), og fjern kortet og popuppen `#jul` fra `site/index.html` og linjen i `site/_redirects`.
+- [ ] Opdatér `Sted` i Teable, når det er på plads. Siden følger med inden for 10 minutter.
+- [ ] Efter 5. december: fjern `Tilmelding åben`, slet `Kost og allergier` og `Bemærkning` på tilmeldingerne (helbredsoplysninger, lovet slettet i formularen). Kortet forsvinder selv, når datoen er passeret. Fjern linjen i `site/_redirects`, eller peg den på det næste arrangement.
 
 ## Sådan bruges det
 
-- Nyt arrangement: opret en række i `Arrangementer`, sæt `Tilmelding åben`, kopiér kortet i `site/index.html`, og kopiér popuppen `#jul` med et nyt id og det nye record-ID i `name="event"`.
+- Nyt arrangement: opret en række i `Arrangementer` med `Navn` og `Dato`, og sæt `Tilmelding åben`. Det flueben er godkendelsen: kun rækker med det vises på forsiden, sorteret efter dato, og kun indtil datoen er passeret. `Sted` og `Beskrivelse` er valgfri. Tomt `Sted` eller `tba` vises som "Sted kommer senere", og uden dato står der "Dato kommer senere". Forsiden henter listen igen efter højst 10 minutter.
+- Er flere arrangementer åbne på samme tid, vælger man arrangement i popuppen.
 - Workeren afviser tilmeldinger til arrangementer, hvor `Tilmelding åben` ikke er sat. Luk tilmeldingen ved at fjerne fluebenet. Tilmeldingerne bliver stående.
 - Gæsteliste og allergier: lav en view af `Tilmeldinger` filtreret på `Arrangement` og `Kommer` = Ja.
 - Via API: filtrér på arrangementets record-ID, fx `{"conjunction":"and","filterSet":[{"fieldId":"Arrangement","operator":"is","value":"recMnXWr0zAMUocMaW2"}]}` med `fieldKeyType=name`.

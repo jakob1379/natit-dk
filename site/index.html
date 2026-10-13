@@ -262,14 +262,10 @@ footer a, .legend .next a { color: inherit; }
         <p class="lead" data-jul="Julefrokost, gløgg på en bar, æbleskiver og pakkeleg. Eller bare øl og vand på streg, som i Lokalet på HCØ.">En fest, en bar, et foredrag, en tur. Eller bare øl og vand på streg, som i Lokalet på HCØ.</p>
         <p>En dato og et sted er nok. Vi sender invitationen ud til alle på listen.</p>
       </div>
-      <div class="empty">
+      <div class="empty" id="arrangementer">
         <span class="ax y" aria-hidden="true">arrangementer</span>
         <span class="ax x" aria-hidden="true">tid</span>
-        <h3 id="julefrokost">NatIT Julefrokost</h3>
-        <p><time datetime="2026-12-05T13:00">Lørdag 5. december kl. 13</time>. Sted kommer senere.</p>
         <p class="ok" id="tak-tilmelding">Tak! Du er tilmeldt. Vi skriver, når planen er klar.</p>
-        <button type="button" class="btn" popovertarget="jul">Tilmeld dig</button>
-        <hr>
         <p>Har du en idé til det næste?</p>
         <a class="btn" href="mailto:fest@natit.dk?subject=Jeg%20vil%20gerne%20arrangere%20noget%20for%20NatIT%27ere&amp;body=Hej%2C%0A%0AJeg%20vil%20gerne%20arrangere%20noget.%0A%0AHvad%3A%20%0AHvorn%C3%A5r%20og%20hvor%3A%20%0AMin%20%C3%A5rgang%20og%20mit%20spor%3A%20%0A">Jeg vil arrangere noget</a>
       </div>
@@ -322,12 +318,10 @@ footer a, .legend .next a { color: inherit; }
   </div>
 </footer>
 
-<div id="jul" class="pop" popover role="dialog" aria-labelledby="jul-h">
+<div id="arrangement" class="pop" popover role="dialog" aria-labelledby="arrangement-h">
   <form class="legend stack" method="post" action="/api/signup">
-    <button type="button" class="luk" popovertarget="jul" popovertargetaction="hide" aria-label="Luk">×</button>
-    <h2 id="jul-h">NatIT Julefrokost</h2>
-    <p class="sub"><time datetime="2026-12-05T13:00">Lørdag 5. december kl. 13</time>. Sted kommer senere.</p>
-    <input type="hidden" name="event" value="recMnXWr0zAMUocMaW2">
+    <button type="button" class="luk" popovertarget="arrangement" popovertargetaction="hide" aria-label="Luk">×</button>
+    <div class="valg"></div>
     <div class="field">
       <label for="j-navn">Navn</label>
       <input id="j-navn" name="navn" type="text" required maxlength="200" autocomplete="name">
@@ -366,7 +360,7 @@ footer a, .legend .next a { color: inherit; }
     <p class="next">Du kan tilmelde dig igen, hvis dit svar ændrer sig. Vi bruger dit nyeste svar. <a href="/privatliv">Privatliv</a></p>
   </form>
 </div>
-<script>if (location.hash === '#julefrokost') document.getElementById('jul').showPopover()</script>
+<script>if (location.hash === '#arrangementer') document.getElementById('arrangement')?.showPopover()</script>
 
 <div id="citat" class="pop" popover role="dialog" aria-labelledby="citat-h">
   <form class="legend stack" method="post" action="/api/quote">

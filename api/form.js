@@ -13,6 +13,24 @@ export const teable = (env, path, init = {}) => fetch(`${(env.TEABLE_BASE || 'ht
   signal: AbortSignal.timeout(5000),
 });
 
+export async function list({ request, env, waitUntil }, name, tableId, map) {
+  const key = new Request(new URL(`/api/${name}`, request.url));
+  const hit = await caches.default.match(key);
+  if (hit) return hit;
+  try {
+    if (!env.TEABLE_TOKEN || !tableId) throw new Error('TEABLE_TOKEN or table ID missing');
+    // ponytail: one page of 100 (Teable's cap for new personal tokens), filtered here; page with skip once the table outgrows it
+    const res = await teable(env, `/api/table/${encodeURIComponent(tableId)}/record?fieldKeyType=name&take=100`);
+    if (!res.ok) throw new Error(`Teable ${res.status}`);
+    const out = Response.json(map((await res.json()).records), { headers: { 'Cache-Control': 'public, max-age=600' } });
+    waitUntil(caches.default.put(key, out.clone()));
+    return out;
+  } catch (e) {
+    console.error(`${name}:`, e.message);
+    return Response.json([], { headers: { 'Cache-Control': 'no-store' } });
+  }
+}
+
 export const handler = (tableId, done, parse, allow) => async ({ request, env }) => {
   if (+request.headers.get('content-length') > 8192) return go(request, '/fejl');
   let form;
