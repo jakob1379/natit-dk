@@ -77,3 +77,16 @@ test('unsubscribe deletes every Mailliste row with that email, and unknown email
   stub(() => Response.json({}, { status: 403 }), { records: [{ id: 'rec1' }] });
   assert.deepEqual(to(await post(unsubscribe, { email: 'a@b.dk' })), [303, '/fejl']);
 });
+
+test('every email field in the page rejects what the server rejects, so people never land on /fejl for it', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const { email } = await import('./form.js');
+  const inputs = (await readFile(new URL('../site/index.html', import.meta.url), 'utf8')).match(/<input[^>]*type="email"[^>]*>/g);
+  assert.equal(inputs.length, 3);
+  for (const input of inputs) {
+    const pattern = input.match(/pattern="([^"]+)"/)?.[1];
+    assert.ok(pattern, input);
+    const browser = new RegExp(`^(?:${pattern})$`, 'v');
+    for (const v of ['navn@gmail', 'navn@gmail.com', 'a.b+c@sub.ku.dk', 'a@b.']) assert.equal(browser.test(v), email(v) !== null, `${v} in ${input}`);
+  }
+});

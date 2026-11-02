@@ -238,7 +238,7 @@ footer a, .legend .next a { color: inherit; }
       <div class="row">
         <div class="field">
           <label for="email">E-mail</label>
-          <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" spellcheck="false">
+          <input id="email" name="email" type="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="Fx navn@gmail.com" required autocomplete="email" inputmode="email" spellcheck="false">
         </div>
         <div class="field">
           <label for="name">Navn <span>(valgfrit)</span></label>
@@ -337,7 +337,7 @@ footer a, .legend .next a { color: inherit; }
     <div class="field">
       <label for="j-email">E-mail <span>(valgfrit)</span></label>
       <p class="hint" id="j-email-hint">Så vi kan sende detaljer, når planen er klar.</p>
-      <input id="j-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="j-email-hint">
+      <input id="j-email" name="email" type="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="Fx navn@gmail.com" maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="j-email-hint">
     </div>
     <fieldset>
       <legend>Kost og allergier <span>(valgfrit)</span></legend>
@@ -397,7 +397,7 @@ footer a, .legend .next a { color: inherit; }
     <div class="field">
       <label for="c-email">E-mail <span>(valgfrit)</span></label>
       <p class="hint" id="c-email-hint">Kun så vi kan kontakte dig. Vises aldrig.</p>
-      <input id="c-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="c-email-hint">
+      <input id="c-email" name="email" type="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="Fx navn@gmail.com" maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-describedby="c-email-hint">
     </div>
     <label class="consent"><input type="checkbox" name="samtykke" value="ja" required><span>Jeg giver lov til, at natit.dk viser mit navn, spor, årgang, svar og link offentligt. Min e-mail vises ikke. <a href="/privatliv">Privatliv</a></span></label>
     <button type="submit">Send</button>
