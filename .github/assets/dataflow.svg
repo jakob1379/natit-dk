@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 32 960 388" width="960" height="388" role="img" aria-labelledby="t d">
+<title id="t">Sådan hænger natit.dk sammen</title>
+<desc id="d">En tilmelding sendes fra forsiden som POST til worker.js, som tjekker rate limit og skriver en ny række i Teable-tabellen Mailliste. Når forsiden hentes, læser Workeren citater og arrangementer fra Teable og sætter dem ind i siden.</desc>
+<style>
+:root{--paper:#EEF2F7;--grid:#DCE3EE;--card:#FFFFFF;--ink:#0B2350;--ink2:#43587A;--pencil:#8A9AA6;--bar:#CCD6E4;--blue:#074A9B;--red:#C8121B;--btn:#C8121B;--read:#074A9B;--hl:#F1EC3C;--onblue:#FFFFFF}
+@media (prefers-color-scheme:dark){:root{--paper:#0A1F45;--grid:#14305E;--card:#10295A;--ink:#E8EEF7;--ink2:#A8B8D0;--pencil:#6A82A6;--bar:#2C4A7C;--blue:#0B57B5;--red:#FF4F57;--btn:#D7222B;--read:#F1EC3C;--hl:rgba(241,236,60,.32)}}
+text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;fill:var(--ink)}
+.serif{font-family:"STIX Two Text",Georgia,"Times New Roman",serif}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+.s{fill:var(--ink2)}
+.card{fill:var(--card);stroke:var(--ink);stroke-width:1.5}
+.tbl{fill:var(--card);stroke:var(--ink2);stroke-width:1.2}
+.bar{fill:var(--bar)}
+.f{fill:none;stroke:var(--pencil);stroke-width:1.4;stroke-dasharray:3 4}
+.p{fill:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:12 120;stroke-dashoffset:12;animation:10s linear infinite}
+.w{stroke:var(--red)}.r{stroke:var(--read)}
+.pA{animation-name:pA}.pB{animation-name:pB}.pC{animation-name:pC}.pD{animation-name:pD}
+.st{opacity:0;animation:10s ease-in-out infinite}
+.press{animation-name:press}.gate{animation-name:gate}.hl1{animation-name:hl1}.row{animation-name:row}.rd{animation-name:rd}.hl2{animation-name:hl2}.show{animation-name:show}
+@keyframes pA{0%,4%{stroke-dashoffset:12}18%,100%{stroke-dashoffset:-100}}
+@keyframes pB{0%,24%{stroke-dashoffset:12}36%,100%{stroke-dashoffset:-100}}
+@keyframes pC{0%,46%{stroke-dashoffset:12}60%,100%{stroke-dashoffset:-100}}
+@keyframes pD{0%,66%{stroke-dashoffset:12}80%,100%{stroke-dashoffset:-100}}
+@keyframes press{0%,2%{opacity:0}4%{opacity:1}9%,100%{opacity:0}}
+@keyframes gate{0%,17%{opacity:0}19%,23%{opacity:1}27%,100%{opacity:0}}
+@keyframes hl1{0%,17%{opacity:0}20%,34%{opacity:1}40%,100%{opacity:0}}
+@keyframes row{0%,35%{opacity:0}39%,92%{opacity:1}97%,100%{opacity:0}}
+@keyframes rd{0%,42%{opacity:0}46%,58%{opacity:1}64%,100%{opacity:0}}
+@keyframes hl2{0%,58%{opacity:0}62%,76%{opacity:1}82%,100%{opacity:0}}
+@keyframes show{0%,78%{opacity:0;transform:translateY(6px)}84%,92%{opacity:1;transform:none}97%,100%{opacity:0;transform:none}}
+@media (prefers-reduced-motion:reduce){
+.p,.press,.gate,.rd{display:none}
+.st{animation:none;opacity:1;transform:none}
+.f{stroke:var(--ink2);stroke-dasharray:none}
+}
+</style>
+<defs>
+<pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="var(--grid)" stroke-width="1"/></pattern>
+<marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--pencil)"/></marker>
+</defs>
+<rect y="32" width="960" height="388" fill="var(--paper)"/>
+<rect y="32" width="960" height="388" fill="url(#g)"/>
+
+<g>
+<rect class="card" x="32" y="56" width="268" height="310" rx="10"/>
+<path d="M32 96V66a10 10 0 0 1 10-10H290a10 10 0 0 1 10 10V96Z" fill="var(--blue)"/>
+<text x="48" y="82" font-size="16" font-weight="700" style="fill:var(--onblue)">natit.dk</text>
+<text class="serif" x="48" y="126" font-size="18">Vi kan begge dele.</text>
+<rect x="48" y="140" width="94" height="28" rx="4" fill="var(--card)" stroke="var(--ink2)"/>
+<text class="s" x="56" y="158" font-size="12.5">E-mail</text>
+<rect x="150" y="140" width="136" height="28" rx="4" fill="var(--btn)"/>
+<rect class="st press" x="150" y="140" width="136" height="28" rx="4" fill="#0B2350" fill-opacity=".35"/>
+<text x="218" y="158" font-size="12" font-weight="600" text-anchor="middle" style="fill:#FFFFFF">Skriv mig på listen</text>
+<text x="48" y="202" font-size="14" font-weight="600">Hvor endte du?</text>
+<rect x="48" y="214" width="3" height="28" fill="var(--red)"/>
+<rect class="bar" x="60" y="218" width="196" height="7" rx="3.5"/>
+<rect class="bar" x="60" y="231" width="132" height="6" rx="3"/>
+<g class="st show">
+<rect x="48" y="252" width="3" height="28" fill="var(--red)"/>
+<rect x="60" y="256" width="176" height="7" rx="3.5" fill="var(--read)" fill-opacity=".55"/>
+<rect class="bar" x="60" y="269" width="104" height="6" rx="3"/>
+<rect class="card" x="48" y="296" width="236" height="54" rx="6"/>
+<rect x="60" y="309" width="116" height="7" rx="3.5" fill="var(--read)" fill-opacity=".55"/>
+<rect class="bar" x="60" y="323" width="86" height="6" rx="3"/>
+<rect x="196" y="311" width="76" height="24" rx="4" fill="var(--btn)"/>
+<text x="234" y="327" font-size="11.5" font-weight="600" text-anchor="middle" style="fill:#FFFFFF">Tilmeld dig</text>
+</g>
+</g>
+
+<g>
+<rect class="card" x="370" y="110" width="200" height="196" rx="10"/>
+<text x="386" y="138" font-size="15" font-weight="700">worker.js</text>
+<text class="s" x="386" y="156" font-size="12">Cloudflare Worker</text>
+<rect x="362" y="168" width="8" height="24" rx="2" fill="var(--ink2)"/>
+<rect class="st gate" x="362" y="168" width="8" height="24" rx="2" fill="var(--red)"/>
+<rect class="st hl1" x="378" y="171" width="186" height="19" rx="3" fill="var(--hl)"/>
+<rect class="st hl2" x="378" y="267" width="186" height="19" rx="3" fill="var(--hl)"/>
+<text class="mono" x="386" y="185">POST /api/subscribe</text>
+<text class="mono s" x="386" y="205">POST /api/unsubscribe</text>
+<text class="mono s" x="386" y="225">POST /api/signup</text>
+<text class="mono s" x="386" y="245">POST /api/quote</text>
+<text class="mono" x="386" y="281">GET /  api/page.js</text>
+<text class="s" x="370" y="328" font-size="12">Højst 5 POST pr. minut pr. IP</text>
+</g>
+
+<g>
+<rect class="card" x="680" y="56" width="248" height="310" rx="10"/>
+<text x="696" y="84" font-size="16" font-weight="700">Teable</text>
+<text class="s" x="696" y="102" font-size="12">projektet natit</text>
+<g>
+<rect class="tbl" x="696" y="116" width="216" height="50" rx="6"/>
+<text x="708" y="134" font-size="13" font-weight="600">Mailliste</text>
+<rect class="bar" x="708" y="142" width="60" height="8" rx="2"/><rect class="bar" x="772" y="142" width="60" height="8" rx="2"/><rect class="bar" x="836" y="142" width="60" height="8" rx="2"/>
+<rect class="bar" x="708" y="153" width="60" height="8" rx="2" opacity=".45"/><rect class="bar" x="772" y="153" width="60" height="8" rx="2" opacity=".45"/><rect class="bar" x="836" y="153" width="60" height="8" rx="2" opacity=".45"/>
+<g class="st row"><rect x="708" y="153" width="60" height="8" rx="2" fill="var(--hl)" stroke="var(--red)" stroke-width="1"/><rect x="772" y="153" width="60" height="8" rx="2" fill="var(--hl)" stroke="var(--red)" stroke-width="1"/><rect x="836" y="153" width="60" height="8" rx="2" fill="var(--hl)" stroke="var(--red)" stroke-width="1"/></g>
+</g>
+<g>
+<rect class="tbl" x="696" y="178" width="216" height="50" rx="6"/>
+<text x="708" y="196" font-size="13" font-weight="600">Tilmeldinger</text>
+<rect class="bar" x="708" y="204" width="60" height="8" rx="2"/><rect class="bar" x="772" y="204" width="60" height="8" rx="2"/><rect class="bar" x="836" y="204" width="60" height="8" rx="2"/>
+<rect class="bar" x="708" y="215" width="60" height="8" rx="2"/><rect class="bar" x="772" y="215" width="60" height="8" rx="2"/><rect class="bar" x="836" y="215" width="60" height="8" rx="2"/>
+</g>
+<g>
+<rect class="tbl" x="696" y="240" width="216" height="50" rx="6"/>
+<rect class="st rd" x="696" y="240" width="216" height="50" rx="6" fill="none" stroke="var(--read)" stroke-width="2.5"/>
+<text x="708" y="258" font-size="13" font-weight="600">Citater</text>
+<rect class="bar" x="708" y="266" width="60" height="8" rx="2"/><rect class="bar" x="772" y="266" width="60" height="8" rx="2"/><rect class="bar" x="836" y="266" width="60" height="8" rx="2"/>
+<rect class="bar" x="708" y="277" width="60" height="8" rx="2"/><rect class="bar" x="772" y="277" width="60" height="8" rx="2"/><rect class="bar" x="836" y="277" width="60" height="8" rx="2"/>
+</g>
+<g>
+<rect class="tbl" x="696" y="302" width="216" height="50" rx="6"/>
+<rect class="st rd" x="696" y="302" width="216" height="50" rx="6" fill="none" stroke="var(--read)" stroke-width="2.5"/>
+<text x="708" y="320" font-size="13" font-weight="600">Arrangementer</text>
+<rect class="bar" x="708" y="328" width="60" height="8" rx="2"/><rect class="bar" x="772" y="328" width="60" height="8" rx="2"/><rect class="bar" x="836" y="328" width="60" height="8" rx="2"/>
+<rect class="bar" x="708" y="339" width="60" height="8" rx="2"/><rect class="bar" x="772" y="339" width="60" height="8" rx="2"/><rect class="bar" x="836" y="339" width="60" height="8" rx="2"/>
+</g>
+</g>
+
+<g marker-end="url(#ar)">
+<path class="f" d="M286 154C326 154 322 180 358 180"/>
+<path class="f" d="M570 180C630 180 636 141 692 141"/>
+<path class="f" d="M696 265C636 265 630 274 576 274"/>
+<path class="f" d="M696 327C630 327 636 282 576 282"/>
+<path class="f" d="M370 274C336 274 334 265 306 265"/>
+<path class="f" d="M370 282C334 282 336 323 290 323"/>
+</g>
+<path class="p w pA" pathLength="100" d="M286 154C326 154 322 180 358 180"/>
+<path class="p w pB" pathLength="100" d="M570 180C630 180 636 141 692 141"/>
+<path class="p r pC" pathLength="100" d="M696 265C636 265 630 274 576 274"/>
+<path class="p r pC" pathLength="100" d="M696 327C630 327 636 282 576 282"/>
+<path class="p r pD" pathLength="100" d="M370 274C336 274 334 265 306 265"/>
+<path class="p r pD" pathLength="100" d="M370 282C334 282 336 323 290 323"/>
+
+<g font-size="12" class="s">
+<text class="s" x="326" y="146" text-anchor="middle">POST</text>
+<text class="s" x="634" y="166" text-anchor="middle">ny række</text>
+<text class="s" x="634" y="306" text-anchor="middle">læser</text>
+<text class="s" x="336" y="254" text-anchor="middle">indsætter</text>
+</g>
+
+<text class="serif s" x="32" y="400" font-size="14"><tspan font-style="italic" style="fill:var(--ink)">Fig. 1.</tspan> Formularerne skriver til Teable gennem Workeren. Forsiden får citater og arrangementer sat ind på serveren.</text>
+</svg>
